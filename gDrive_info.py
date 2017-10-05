@@ -56,72 +56,23 @@ def print_file_data(drive_file,tofile=False,filename = 'fileids.txt'):
             file.close()
     print('Name: {0}\n\tMemeType: {1}\n\tID: {2}\n\tDescription: {3}\n\tDownloadURL: {4}'.format(drive_file['name'], drive_file['mimeType'], drive_file['id'], description, downloadURL))
 
-def download_http(file_id, mimeType, filename, drive_service,filet):
+def download_file(fileObj,drive_service,exportFile='GroceryList.txt',debugging = False):
     mimeTypeConversion = {'application/vnd.google-apps.document' : "text/plain",
                             'text/plain' : 'text/plain'}
-    exportMemeType = mimeTypeConversion[mimeType]
-        #GET https://www.googleapis.com/drive/v2/files/fileId/export
-    print("Attempting to download file:\n\tID: {0}\n\tName: {1}\n\tmimeTpye: {2}\n\tDownload Type:{3}".format(file_id,filename,mimeType,exportMemeType))
+    exportMemeType = mimeTypeConversion[fileObj['mimeType']]
+    if debugging:
+        print("Attempting to download file:\n\tID: {0}\n\tName: {1}\n\tmimeTpye: {2}\n\tDownload Type:{3}".format(fileObj['id'],fileObj['name'],fileObj['mimeType'],exportMemeType))
 
-    #resp, content = drive_service._http.requests("https://www.googleapis.com/drive/v2/files/{0}/{1}".format(file_id,exportMemeType))
-    #print (resp)
-    r = requests.get('https://api.github.com/user', auth=('user', 'pass'))
-    r.raise_for_status()
-    print(r)
+    resp, content = httplib2.Http().request("https://www.googleapis.com/drive/v3/files/{0}/export?mimeType=text%2Fplain&key=AIzaSyBQHJRYRZKK1QovxtStf_QujyW8n_MJ8m4".format(fileObj['id']))
 
-def download_file2(file_id, mimeType, filename, drive_service,filet):
-    mimeTypeConversion = {'application/vnd.google-apps.document' : "text/plain",
-                            'text/plain' : 'text/plain'}
-    exportMemeType = mimeTypeConversion[mimeType]
-        #GET https://www.googleapis.com/drive/v2/files/fileId/export
-    print("Attempting to download file:\n\tID: {0}\n\tName: {1}\n\tmimeTpye: {2}\n\tDownload Type:{3}".format(file_id,filename,mimeType,exportMemeType))
+    if debugging:
+        print("Status: " + str(resp.status))
 
-    #https://www.googleapis.com/drive/v3/files/1BDiJ0Dzjdd-Tvdo69KMjAjbEpL4j6fLPSsuhRrzgrZ0/export?mimeType=text%2Fplain&key={YOUR_API_KEY}
-    #u = requests.get("https://www.googleapis.com/drive/v2/files/{0}/export?mimeType={1}".format(file_id,exportMemeType))
-    resp, content = httplib2.Http().request("https://www.googleapis.com/drive/v3/files/1BDiJ0Dzjdd-Tvdo69KMjAjbEpL4j6fLPSsuhRrzgrZ0/export?mimeType=text%2Fplain&key=AIzaSyBQHJRYRZKK1QovxtStf_QujyW8n_MJ8m4")
-    print("Status: "+str(resp.status))
+    if not resp.status == '400':
+        file = open(exportFile,'wb')
+        file.write(content)
+
     return(resp, content)
-def download_file3(file_id, mimeType, filename, service):
-    result = service.spreadsheets().values().get(
-        spreadsheetId=file_id, range="Item Name").execute()
-    print (json.dumps(result, sort_keys=True, indent=4))
-def download_file(file_id, mimeType, filename, drive_service):
-    mimeTypeConversion = {'application/vnd.google-apps.document' : "text/html"}
-    DownloadMimeType = mimeTypeConversion[mimeType]
-    print("Attempting to download file:\n\tID: {0}\n\tName: {1}\n\tmimeTpye: {2}\n\tDownload Type:{3}".format(file_id,filename,mimeType,DownloadMimeType))
-    '''
-    request = drive_service.files().get_media(fileId=file_id)
-    stream = io.BytesIO()
-    downloader = MediaIoBaseDownload(stream, request)
-    done = False
-    '''
-
-    #New Attempt
-    try:
-        drive_service.files().export_media(fileId = file_id,
-                    mimeType = DownloadMimeType).execute()
-        print("Attempt successful!?")
-    except Exception as e:
-        print(e)
-    '''
-    while done is False:
-        status, done = downloader.next_chunk()
-        print ("Download %d%%." % int(status.progress() * 100))
-
-
-    # Retry if we received HttpError
-    for retry in range(0, 5):
-        try:
-            while done is False:
-                status, done = downloader.next_chunk()
-                print ("Download %d%%." % int(status.progress() * 100))
-            print(stream.getvalue())
-        except Exception as error:
-            print ('There was an API error: {}. Try # {} failed.'.format(
-                error.response,
-                retry,
-            ))
-    '''
 
 def detect_changes(drive_service):
     response = drive_service.changes().getStartPageToken().execute()
@@ -156,7 +107,6 @@ def delete_file(service, file_id):
   except errors.HttpError, error:
     print ('An error occurred: %s' % error)
 
-
 def print_file_metadata(service, file_id):
   """Print a file's metadata.
 
@@ -171,44 +121,3 @@ def print_file_metadata(service, file_id):
     print ('MIME type: %s' % file['mimeType'])
   except errors.HttpError, error:
     print ('An error occurred: %s' % error)
-
-##Only useable for files with binary content
-'''
-def Nprint_file_content(service, file_id):
-  """Print a file's content.
-
-  Args:
-    service: Drive API service instance.
-    file_id: ID of the file.
-
-  Returns:
-    File's content if successful, None otherwise.
-  """
-  try:
-    print( service.files().get_media(fileId=file_id).execute())
-  except errors.HttpError, error:
-    print ('An error occurred: %s' % error)
-def Ndownload(service, file_id, local_fd):
-  """Download a Drive file's content to the local filesystem.
-
-  Args:
-    service: Drive API Service instance.
-    file_id: ID of the Drive file that will downloaded.
-    local_fd: io.Base or file object, the stream that the Drive file's
-        contents will be written to.
-  """
-  request = service.files().get_media(fileId=file_id)
-  media_request = http.MediaIoBaseDownload(local_fd, request)
-
-  while True:
-    try:
-      download_progress, done = media_request.next_chunk()
-    except errors.HttpError, error:
-      print ('An error occurred: %s' % error)
-      return
-    if download_progress:
-      print ('Download Progress: %d%%' % int(download_progress.progress() * 100))
-    if done:
-      print ('Download Complete')
-      return
-'''

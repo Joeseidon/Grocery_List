@@ -4,7 +4,7 @@ class item:
     frequency = 0
     weeks_past = 0
 
-    def __init__(self, name, quantity = 1, frequency = 1):
+    def __init__(self, name ="Unknown", quantity = 1, frequency = 1):
         self.name = name
         self.quantity = quantity
         self.frequency = frequency
@@ -54,8 +54,10 @@ class item:
     def a_week_has_past(self):
         weeks_past += 1
 
+    def toString(self):
+        return str(self.quantity)+" -- "+self.name
     ##To String Fucntionality
     def __str__(self):
-        return self.name+":"+str(self.quantity)
+        return self.toString()
     def __repr__(self):
         return self.__str__()
