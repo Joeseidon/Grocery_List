@@ -4,10 +4,11 @@ class item:
     frequency = 0
     weeks_past = 0
 
-    def __init__(self, name ="Unknown", quantity = 1, frequency = 1):
+    def __init__(self, name ="Unknown", quantity = 1, frequency = 1,wW=0):
         self.name = name
         self.quantity = quantity
         self.frequency = frequency
+        self.weeks_past = wW
 
     ##Make items comparable
     def __eq__(self, other):
@@ -25,10 +26,14 @@ class item:
     ##true will be return. The weeks_past will not be reset because there is
     ##no guarente the item makes it to the list at this point.
     def needed(self):
-        if(weeks_past >= frequency):
+        if(self.weeks_past >= self.frequency):
             return True
         else:
             return False
+
+    def reset_weeks_past(self):
+        self.weeks_past = 0
+
     ##Basic Get Methods
     def get_name(self):
         return self.name
@@ -49,13 +54,13 @@ class item:
 
     ##Weeks_past functionality
     def get_weeks_past(self):
-        return weeks_past
+        return self.weeks_past
 
-    def a_week_has_past(self):
-        weeks_past += 1
+    def increment_weeks_past(self):
+        self.weeks_past += 1
 
     def toString(self):
-        return str(self.quantity)+" -- "+self.name
+        return str(self.quantity)+" "+self.name
     ##To String Fucntionality
     def __str__(self):
         return self.toString()
