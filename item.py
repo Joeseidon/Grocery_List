@@ -36,7 +36,7 @@ class item:
     def reset_weeks_past(self):
         self.weeks_past = 0
 
-    ##Basic Get Methods
+    #Basic Get Methods
     def get_unitType(self):
         return self.unitType
 
@@ -49,27 +49,29 @@ class item:
     def get_frequency(self):
         return self.frequency
 
-    ##Basic Set Methods
+    #Basic Set Methods
     def set_frequency(self, f):
         self.frequency = f
+
     def set_name(self, n):
         self.name = n
+
     def set_quantity(self, q):
         self.quantity = q
 
-    ##Weeks_past functionality
+    #Weeks_past functionality
     def get_weeks_past(self):
         return self.weeks_past
 
     def increment_weeks_past(self):
         self.weeks_past += 1
 
+    #To String Fucntionality
     def toString(self):
         if not(self.unitType == "na"):
             return str(self.quantity)+" "+self.unitType+" "+self.name
         else:
             return str(self.quantity)+" "+self.name
-    ##To String Fucntionality
     def __str__(self):
         return self.toString()
     def __repr__(self):

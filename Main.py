@@ -34,34 +34,63 @@ Contacts = {
     }
 
 debug = False
-perform_notify = False
+perform_notify = True
+
+connection_status = {"gDrive": False, "email": False, "phone": False}
 
 def main():
-    #service = create_Gdrive_service()
-    #Working code. Taken out for additional testing
-
     #Establish GDrive service
-    service, flags = init(argv = '', name = 'drive', version = 'v3', doc = '__doc__', filename = '__file__', scope = SCOPES)
+    try:
+        connection_status["gDrive"] = True
+        service, flags = init(argv = '', name = 'drive', version = 'v3',
+                                    doc = '__doc__', filename = '__file__',
+                                    scope = SCOPES)
+    except:
+        connection_status["gDrive"] = False
 
-    #Locate the needed grocery list
-    target_file = find_file(service, file_title = TARGET_FILE_NAME, debugging = debug)
+    #Establish email and phone server connections
+    contact_eng = EmployeeNotification()
+    connection_status["email"] = contact_eng.establish_email_connection()
+    connection_status["phone"] = contact_eng.establish_phone_connection()
+
+
+    if connection_status["gDrive"]:
+        #Locate the needed grocery list
+        target_file = find_file(service, file_title = TARGET_FILE_NAME, debugging = debug)
 
     #For debugging (shows file metadata)
-    if debug:
+    if debug and connection_status["gDrive"]:
         print_file_data(target_file)
 
-    #Retrive file content. Saved to GroceryList.txt
-    resp, content = download_file(target_file, service, debugging = debug, exportFile = EXPORT_FILE_NAME)
+    if connection_status["gDrive"]:
+        #Retrive file content. Saved to GroceryList.txt
+        resp, content = download_file(target_file, service, debugging = debug,
+                                        exportFile = EXPORT_FILE_NAME)
 
     #Perform list processing with the most up to date list
-    list_explorer = ListProcessor(target_list = EXPORT_FILE_NAME, commone_items_obj = NEEDED_ITEMS_JSON)
-    list_explorer.process_list(debug = debug)
+    try:
+        list_explorer = ListProcessor(target_list = EXPORT_FILE_NAME,
+                                        commone_items_obj = NEEDED_ITEMS_JSON)
+    except:
+        if perform_notify and connection_status["email"]:
+            contact_eng.send_error_msg(Contacts, e.msg, connections= connection_status)
+        else:
+            print(e.message)
+
+    try:
+        success = list_explorer.process_list(debug = debug)
+    except Exception as e:
+        success = False
+        if perform_notify and connection_status["email"]:
+            contact_eng.send_error_msg(Contacts, e.msg, connections= connection_status)
 
     #used to limmit email and text during debugging and development
-    if perform_notify:
+    if perform_notify and success:
         #Notify individuals that the list should be looked at.
-        contact_eng = EmployeeNotification()
-        contact_eng.notify_Employee(text_file = RECOMMENDATIONS_FILE_NAME, contacts = Contacts, debugging=debug)
+        contact_eng.notify_Employee(text_file = RECOMMENDATIONS_FILE_NAME,
+                                        contacts = Contacts,
+                                        connection_status = connection_status,
+                                        debugging=debug)
 
 if __name__ == '__main__':
     main()

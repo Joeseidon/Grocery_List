@@ -3,10 +3,9 @@ import re
 import json
 import datetime
 import time
+import os
 
 class ListProcessor:
-    #CURRENT_LIST = "GroceryList.txt"
-    #NEEDED_ITEMS_JSON = "Common_Items.json"
     old_list_read = False
     new_list_read = False
 
@@ -20,11 +19,15 @@ class ListProcessor:
         self.past_items = []
 
     def process_list(self,debug=False):
-        self.generate_past_list(debugging=debug)
-        self.generate_current_list(debugging=debug)
-        self.item_list_to_file(self.determine_needed_items(debugging = debug))
-        #Rewrite Common Items reference file
-        self.rewrite_Common_Items_File()
+        try:
+            self.generate_past_list(debugging=debug)
+            self.generate_current_list(debugging=debug)
+            self.item_list_to_file(self.determine_needed_items(debugging = debug))
+            #Rewrite Common Items reference file
+            self.rewrite_Common_Items_File()
+        except:
+            return False
+        return True
 
     def determine_needed_items(self,debugging = False):
         #Update weeks past for all items since a week should have passed since

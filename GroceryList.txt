@@ -47,7 +47,7 @@ Paper Towels (12 Rolls pack)
 Cans of Soup, etc:
    (2) Progresso: Traditional Homestyle Chicken with Vegetables & Pearl Pasta
    (1) Progresso: Rich & Hearty Minestrone
-   (3) Progresso: Vegetable Classics Tomato Basil
+   (3) Progresso: Vegetable Classics Tomato Basil 
    (3) Progresso: Traditional Italian Style Wedding
    (3) Progresso: Heart Healthy Reduced Sodium Chicken Gumbo
    (2) Progresso: Creamy Potato with Bacon
@@ -57,16 +57,17 @@ Cans of Soup, etc:
 1 package - Johnsonville Bratwurst
 1 package - Johnsonville Cheddar Bratwurst
 2 packages - Oscar Mayer Bun-Length Beef Franks (8 pack)
-
-Bread
+ 
+Bread:
 * Arnie’s Heartland Crusty Grain Artisan bread
 * Artisan bread: sourdough
 
 
-Lunch meat
+Lunch meat: 
 * ½ lb Roast Beef
 * ½ lb Smoked Turkey
 * ½ lb Oven Roasted Chicken Breast
+* ½ lb Ham
 * ½ lb Pastrami
 * ½ lb Hard Salami
 
@@ -190,12 +191,12 @@ Cereal / Breakfast
 1 box - Jimmy Dean Pancakes & Sausage, On a Stick, 12 ct
 1 box - Jimmy Dean - Stuffed Hash Browns (Sausage & Cheese or Meat Lovers)
 Chips / Crackers / Snacks
-1 bag - Oke-Doke Popcorn
+1 bag - Oke-Doke Popcorn 
 1 bag - Sunchips - Garden Salsa
 1 bag - Sunchips - Harvest Cheddar
 1 bag - Sunchips - Farmhouse Ranch
 1 bag - Sunchips - French Onion
-1 bag - Sunchips - Veggie Harvest Tomato Basil 7 Cheese
+1 bag - Sunchips - Veggie Harvest Tomato Basil 7 Cheese 
 1 bag - Lay's Baked Potato Crisps, Barbecue
 1 bag - Doritos Chips, Nacho Cheese
 1 bag - Doritos Chips, Spicy Nacho
@@ -227,7 +228,7 @@ Chips / Crackers / Snacks
 
 1 container - Garden Fresh Gourmet Salsa, Jack's Special (Medium or Hot)
 1 container - Garden Fresh Med Salsa Thick & Chunky
-1 jar - Tostitos Hot Chunky Habanero Salsa
+1 jar - Tostitos Hot Chunky Habanero Salsa 
 1 bottle - Sweet Baby Ray's, Sweet 'n Spicy BBQ Sauce
 1 bottle - Kraft Squeeze Mayo
 1 bottle - Cholula Original Hot Sauce
@@ -263,7 +264,7 @@ Chips / Crackers / Snacks
 1 package - hot dog buns (8 pack)
 
 
-Bread
+Bread 
 * Aunt Millie’s (or Koepplinger’s) 100% Whole Wheat bread
 * Homestyle Italian bread
 * Pepperidge Farm 15 grain bread
@@ -274,7 +275,7 @@ Bread
 * Thomas’ Everything Bagels (6 ct)
 
 
-Lunch meat
+Lunch meat 
 * ½ lb Roast Beef
 * 1 lb Smoked Turkey
 * ½ lb Oven Roasted Chicken Breast
@@ -321,7 +322,7 @@ Dannon Oikos Greek yogurt:
    (1) Key Lime
    (1) Vanilla
    (1) Peach
-   (1) Cafe Latte
+   (1) Cafe Latte 
    (3) Strawberry
    (2) Black Cherry
 
@@ -329,7 +330,7 @@ Dannon Oikos Greek yogurt:
 Soup
 Cans of Soup, etc:
    (2) Campbell's: Beef & Bean Chili, Roadhouse
-   (2) Campbell's: Beef & Bean Chili, Firehouse Hot & Spicy
+   (2) Campbell's: Beef & Bean Chili, Firehouse Hot & Spicy 
    (2) Chef Boyardee Beef Ravioli
    (2) Chef Boyardee Mini Beef Ravioli & Meatballs
    (1) Select Harvest: Vegetable Medley
@@ -339,8 +340,8 @@ Cans of Soup, etc:
    (1) Progresso: Light Zesty! Santa Fe Style Chicken
    (1) Progresso: Traditional Homestyle Chicken with Vegetables & Pearl Pasta
    (1) Progresso: Rich & Hearty Minestrone
-   (1) Progresso: Vegetable Classics Tomato Basil
-   (1) Progresso: Light Savory Vegetable Barley
+   (1) Progresso: Vegetable Classics Tomato Basil 
+   (1) Progresso: Light Savory Vegetable Barley 
    (1) Progresso: Traditional Italian Style Wedding
    (1) Progresso: Heart Healthy Italian Style White Bean Chicken Sausage
    (1) Progresso: Heart Healthy Sodium Chicken & Wild Rice Soup
@@ -351,11 +352,11 @@ Cans of Soup, etc:
    (2) Home Style: Italian-Style Wedding
    (2) Home Style: Southwest-Style Potato with Green Chilies
    (2) Home Style: Southwest-Style White Chicken Chili Soup
-   (2) Home Style: Whole Grain Pasta Fagioli
+   (2) Home Style: Whole Grain Pasta Fagioli 
    (2) Home Style: Minestrone Soup
    (2) Home Style: Chicken Noodle
    (2) Home Style: Creole-Style Chicken with Red Beans & Rice Soup
-   (2) Home Style: Healthy Request Harvest Tomato with Basil
+   (2) Home Style: Healthy Request Harvest Tomato with Basil 
    (2) Chunky: Grilled & Sausage Gumbo Chicken
    (2) Chunky: Spicy Chicken Quesadilla
 
@@ -406,7 +407,7 @@ Paper Towels (12 Rolls pack)
 1 package - Dixie coffee cups with lids (PerfecTouch Grab’N GO) 12oz 26 ct
 1 box - Bunn coffee filters (2 ¾” x 3”) - must be this size
 1 package - coffee stir sticks
-1 package - K-Cup Green Tea
+1 package - K-Cup Green Tea 
 1 package - K-Cup Coffee Meijer Variety Pack
 1 package - K-Cup Hot Apple Cider
 1 package - K-Cup Swiss Miss Hot Chocolate
