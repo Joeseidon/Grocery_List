@@ -10,20 +10,6 @@ from oauth2client import file
 from googleapiclient import discovery
 from googleapiclient.http import build_http
 
-
-# If modifying these scopes, delete your previously saved credentials
-#SCOPES = 'https://www.googleapis.com/auth/drive'
-#CLIENT_SECRET_FILE = 'client_secrets.json'
-#APPLICATION_NAME = 'pytest'
-
-def create_Gdrive_service():
-    credentials = get_credentials()
-    http = credentials.authorize(httplib2.Http())
-    service = discovery.build('drive', 'v3', http=http)
-    print("Finished GDrive Service")
-    return service
-
-
 def init(argv, name, version, doc, filename, scope=None, parents=[], discovery_filename=None):
   """A common initialization routine for samples.
 
@@ -93,43 +79,3 @@ def init(argv, name, version, doc, filename, scope=None, parents=[], discovery_f
           base='https://www.googleapis.com/',
           http=http)
   return (service, flags)
-
-
-'''
-def get_credentials():
-    """Gets valid user credentials from storage.
-
-    If nothing has been stored, or if the stored credentials are invalid,
-    the OAuth2 flow is completed to obtain the new credentials.
-
-    Returns:
-        Credentials, the obtained credential.
-    """
-    home_dir = os.path.expanduser('~')
-    credential_dir = os.path.join(home_dir, '.credentials')
-    if not os.path.exists(credential_dir):
-        os.makedirs(credential_dir)
-    credential_path = os.path.join(credential_dir,
-                                   'drive-python-quickstart.json')
-
-    print("Credentials Found")
-
-    store = Storage(credential_path)
-    credentials = store.get()
-
-    print("Crednetials Grabbed from Storage")
-    if not credentials:
-        print ("no credentials")
-    if credentials.invalid:
-        print ("invalid credentials")
-
-    if not credentials or credentials.invalid:
-        flow = client.flow_from_clientsecrets(CLIENT_SECRET_FILE, SCOPES)
-        flow.user_agent = APPLICATION_NAME
-        #if flags:
-        credentials = tools.run_flow(flow, store)
-        #else: # Needed only for compatibility with Python 2.6
-            #credentials = tools.run(flow, store)
-        print('Storing credentials to ' + credential_path)
-    return credentials
-'''

@@ -34,6 +34,7 @@ Contacts = {
     }
 
 debug = False
+perform_notify = False
 
 def main():
     #service = create_Gdrive_service()
@@ -56,9 +57,11 @@ def main():
     list_explorer = ListProcessor(target_list = EXPORT_FILE_NAME, commone_items_obj = NEEDED_ITEMS_JSON)
     list_explorer.process_list(debug = debug)
 
-    #Notify individuals that the list should be looked at.
-    contact_eng = EmployeeNotification()
-    contact_eng.notify_Employee(text_file = RECOMMENDATIONS_FILE_NAME, contacts = Contacts, debugging=debug)
+    #used to limmit email and text during debugging and development
+    if perform_notify:
+        #Notify individuals that the list should be looked at.
+        contact_eng = EmployeeNotification()
+        contact_eng.notify_Employee(text_file = RECOMMENDATIONS_FILE_NAME, contacts = Contacts, debugging=debug)
 
 if __name__ == '__main__':
     main()

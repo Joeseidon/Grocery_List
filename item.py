@@ -3,12 +3,14 @@ class item:
     quantity = 0
     frequency = 0
     weeks_past = 0
+    unitType = ""
 
-    def __init__(self, name ="Unknown", quantity = 1, frequency = 1,wW=0):
+    def __init__(self, name ="Unknown", quantity = 1, frequency = 1,wW=0, units_cont="na"):
         self.name = name
         self.quantity = quantity
         self.frequency = frequency
         self.weeks_past = wW
+        self.unitType = units_cont
 
     ##Make items comparable
     def __eq__(self, other):
@@ -19,7 +21,7 @@ class item:
         result = self.get_name() == other.get_name()
 
         print("\tResult: "+str(result))
-        return
+        return result
 
     ##This fucntion looks at the frequnecy of need for this product. It then
     ##looks to see how many weeks have past. If it is time to order the item
@@ -35,6 +37,9 @@ class item:
         self.weeks_past = 0
 
     ##Basic Get Methods
+    def get_unitType(self):
+        return self.unitType
+
     def get_name(self):
         return self.name
 
@@ -60,7 +65,10 @@ class item:
         self.weeks_past += 1
 
     def toString(self):
-        return str(self.quantity)+" "+self.name
+        if not(self.unitType == "na"):
+            return str(self.quantity)+" "+self.unitType+" "+self.name
+        else:
+            return str(self.quantity)+" "+self.name
     ##To String Fucntionality
     def __str__(self):
         return self.toString()

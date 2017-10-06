@@ -10,7 +10,7 @@ class ListProcessor:
     old_list_read = False
     new_list_read = False
 
-    def __init__(self, target_list="GroceryList.txt",commone_items_obj="Common_Items.json"):
+    def __init__(self, target_list="GroceryList.txt",commone_items_obj="Common_items.json"):
         self.CURRENT_LIST = target_list
         self.NEEDED_ITEMS_JSON = commone_items_obj
         self.List_Date = ''
@@ -31,6 +31,9 @@ class ListProcessor:
             # the last time this script was run
         self.update_Weeks_Past(self.past_items)
 
+        #Used to convert fractions from textfile to a usable formatter_class
+        _u = lambda t: t.decode('UTF-8', 'replace') if isinstance(t,str) else t
+
         #Analyize date
         #Determine if the list is out of date and indicate that in the txt file
         #if out of date recommendations don't change in this script
@@ -44,9 +47,15 @@ class ListProcessor:
                         if debugging:
                             print str(count)+"::"+"comparing: " + str(item) +" and "+str(i)
                         count+=1
-                        if item.get_name() in i.get_name():
-                            found = True
-                            break
+                        try:
+                            if item.get_name() in i.get_name():
+                                found = True
+                                break
+                        except:
+
+                            if item.get_name() in _u(i.get_name()):
+                                found = True
+                                break
                     if debugging:
                         print("######Result########")
                         print found
@@ -68,7 +77,9 @@ class ListProcessor:
             data = json.load(f)
 
         for i in data["PastItems"]:
-            r = item(name=i["name"],quantity=i["quantity"],frequency=i["frequency"],wW=i["weeksWithout"])
+            r = item(name=i["name"],quantity=i["quantity"],
+                        frequency=i["frequency"],wW=i["weeksWithout"],
+                        units_cont = i["unitType"])
             self.past_items.append(r)
 
         if debugging:
@@ -77,6 +88,7 @@ class ListProcessor:
         self.old_list_read = True
 
     def generate_current_list(self,debugging = False):
+        bullet_list = False
         file = open(self.CURRENT_LIST,"r")
         for line in file:
             if("Grocery List for Performance Software to be delivered" in line):
@@ -84,9 +96,11 @@ class ListProcessor:
                 self.List_Date = match.group(0)
             if ((not("Grocery List for Performance Software to be delivered" in line))
                     and not (line in ['\n', '\r\n', ' '])
-                    and not("----------------------" in line)):
+                    and not("----------------------" in line)
+                    and not line == None):
                 if("Everything below the line will not be ordered (for copy & paste - previous weeks)" in line):
                     break
+                print("Line of Intrest: "+line)
                 quantity = ""
                 index = 0
                 for char in line:
@@ -96,12 +110,13 @@ class ListProcessor:
                     else:
                         break
                 strItem = re.search('.+\S',line)
-                i = item(name=strItem.group()[index:],quantity=quantity)
-                self.current_list.append(i)
+                if not (strItem == None):
+                    i = item(name=strItem.group(0)[index:],quantity=quantity)
+                    self.current_list.append(i)
 
         file.close()
         if debugging:
-            print"###############################Current#################################"
+            print"###############################Current List#################################"
             self.print_items(self.current_list)
         self.new_list_read = True
 
@@ -113,7 +128,7 @@ class ListProcessor:
         for item in listp:
             print item
 
-    def listOutofDate(self):
+    def list_out_of_date(self):
         list_d = time.strptime(self.List_Date, "%m/%d/%y")
         current_d = time.strptime(self.Current_Date, "%m/%d/%y")
         if(current_d > list_d):
@@ -123,7 +138,7 @@ class ListProcessor:
 
     def item_list_to_file(self,itemlist,filename="neededItems.txt"):
         file = open(filename, "w")
-        if self.listOutofDate():
+        if self.list_out_of_date():
             file.write("The current list is out of date as of "
                         +self.Current_Date+
                         ".\nThe following recommendations are based on what is currently in the list.\n")
@@ -145,8 +160,13 @@ class ListProcessor:
                 {"weeksWithout": i.get_weeks_past(),
                 "frequency": i.get_frequency(),
             	 "quantity": i.get_quantity(),
-            	 "name": i.get_name()
+            	 "name": i.get_name(),
+                 "unitType": i.get_unitType()
             })
         newDic = {"PastItems":newListJson}
         with open(self.NEEDED_ITEMS_JSON, 'w') as f:
             json.dump(newDic, f)
+
+if __name__ == '__main__':
+    L = ListProcessor()
+    L.process_list(debug=True)
