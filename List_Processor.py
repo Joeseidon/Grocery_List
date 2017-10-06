@@ -5,22 +5,24 @@ import datetime
 import time
 
 class ListProcessor:
-    CURRENT_LIST = "GroceryList.txt"
-    NEEDED_ITEMS_JSON = "Common_Items.json"
+    #CURRENT_LIST = "GroceryList.txt"
+    #NEEDED_ITEMS_JSON = "Common_Items.json"
     old_list_read = False
     new_list_read = False
 
-    def __init__(self):
+    def __init__(self, target_list="GroceryList.txt",commone_items_obj="Common_Items.json"):
+        self.CURRENT_LIST = target_list
+        self.NEEDED_ITEMS_JSON = commone_items_obj
         self.List_Date = ''
         self.Current_Date = datetime.datetime.today().strftime('%m/%d/%y')
         self.current_list = []
         self.needed_items = []
         self.past_items = []
 
-    def listProcessing(self,debug):
+    def process_list(self,debug=False):
         self.generate_past_list(debugging=debug)
         self.generate_current_list(debugging=debug)
-        self.item_list_to_file(self.determine_needed_items())
+        self.item_list_to_file(self.determine_needed_items(debugging = debug))
         #Rewrite Common Items reference file
         self.rewrite_Common_Items_File()
 
@@ -50,7 +52,8 @@ class ListProcessor:
                         print found
                     if not found:
                         if(item.needed()):
-                            print("needed: "+item.get_name())
+                            if debugging:
+                                print("needed: "+item.get_name())
                             self.needed_items.append(item)
                             item.reset_weeks_past()
                     else:
@@ -147,7 +150,3 @@ class ListProcessor:
         newDic = {"PastItems":newListJson}
         with open(self.NEEDED_ITEMS_JSON, 'w') as f:
             json.dump(newDic, f)
-
-if __name__ == '__main__':
-    listp = ListProcessor()
-    listp.listProcessing(debug=True)

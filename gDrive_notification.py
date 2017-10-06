@@ -1,11 +1,12 @@
-import PSgrocer_email
-import PSgrocer_phone
+from PSgrocer_phone import *
+from PSgrocer_email import *
 
-def set_up():
-    phone = PSgrocer_phone()
-    email = PSgrocer_email()
+class EmployeeNotification:
+    def __init__(self):
+        self.phone = PS_Shopper_Phone()
+        self.email = PS_Shopper_Email()
 
-def notify_Employee(Name,need_items_file):
-    subject = "Time to review next weeks shopping list."
-    phone.sendText(recipient="5863821908", msg=subject)
-    email.email_textfile(file_name=need_items_file, SUBJECT=subject)
+    def notify_Employee(self, text_file, contacts,debugging = False):
+        subject = "Time to review next weeks shopping list. Check your eamil for recommendations."
+        self.phone.sendText(recipient_list = contacts["Phone_Contacts"], msg=subject, debug = debugging)
+        self.email.email_textfile(file_name=text_file, email_list=contacts["Email_Contacts"], SUBJECT=subject, debugging=debugging)

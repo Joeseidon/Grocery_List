@@ -11,14 +11,15 @@ class PS_Shopper_Phone:
         # Set twilio number
         self.twilio_number = "+19472829832"
 
-    def sendText(self, recipient, msg = "Testing Grocery App", debugg = False):
+    def sendText(self, recipient_list = ['5863821908'], msg = "Testing Grocery App", debug = False):
         #Connect to Twilio client
         client = Client(self.account_sid, self.auth_token)
         #Send Message
-        message = client.messages.create(
-            to = recipient,
-            from_ = self.twilio_number,
-            body = msg)
+        for contact in recipient_list:
+            message = client.messages.create(
+                to = contact,
+                from_ = self.twilio_number,
+                body = msg)
 
-        if debugg:
+        if debug:
             print(message.sid)

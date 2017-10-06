@@ -13,8 +13,8 @@ from oauth2client.file import Storage
 from gDrive_auth import *
 from gDrive_info import *
 import smtplib
-from PSgrocer_phone import *
-from PSgrocer_email import *
+from gDrive_notification import *
+from List_Processor import *
 
 try:
     import argparse
@@ -25,38 +25,40 @@ except ImportError:
 SCOPES = 'https://www.googleapis.com/auth/drive'
 TARGET_FILE_NAME = "Test Grocier List"
 EXPORT_FILE_NAME = "GroceryList.txt"
+RECOMMENDATIONS_FILE_NAME = "neededItems.txt"
+NEEDED_ITEMS_JSON = "Common_Items.json"
 
-debug = True
+Contacts = {
+    "Email_Contacts" : ['cutinoj@mail.gvsu.edu','joseph.cutino@psware.com'],
+    "Phone_Contacts" : ['5863821908']
+    }
+
+debug = False
 
 def main():
     #service = create_Gdrive_service()
     #Working code. Taken out for additional testing
+
+    #Establish GDrive service
     service, flags = init(argv = '', name = 'drive', version = 'v3', doc = '__doc__', filename = '__file__', scope = SCOPES)
 
-    '''
-    if debug:
-        print_drive_contents(service,10)
-    '''
-
+    #Locate the needed grocery list
     target_file = find_file(service, file_title = TARGET_FILE_NAME, debugging = debug)
-    print_file_data(target_file)
 
+    #For debugging (shows file metadata)
+    if debug:
+        print_file_data(target_file)
+
+    #Retrive file content. Saved to GroceryList.txt
     resp, content = download_file(target_file, service, debugging = debug, exportFile = EXPORT_FILE_NAME)
 
+    #Perform list processing with the most up to date list
+    list_explorer = ListProcessor(target_list = EXPORT_FILE_NAME, commone_items_obj = NEEDED_ITEMS_JSON)
+    list_explorer.process_list(debug = debug)
 
+    #Notify individuals that the list should be looked at.
+    contact_eng = EmployeeNotification()
+    contact_eng.notify_Employee(text_file = RECOMMENDATIONS_FILE_NAME, contacts = Contacts, debugging=debug)
 
 if __name__ == '__main__':
     main()
-
-    ##This works, commented out for google drive debugging
-    '''
-    email = PS_Shopper_Email()
-    email.sendMail(TEXT="Sending python test.",
-                    TO=['cutinoj@mail.gvsu.edu'],
-                    SUBJECT = 'Python Test')
-    '''
-    ##This works, commented out for email debugging
-    '''
-    phone = PS_Shopper_Phone()
-    phone.sendText("+15863821908", "Test from script")
-    '''

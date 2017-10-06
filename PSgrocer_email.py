@@ -47,7 +47,7 @@ class PS_Shopper_Email:
 
     def email_textfile(self,file_name,
                 FROM= PyEmail,
-                TO= ['cutinoj@mail.gvsu.edu'],
+                email_list= ['cutinoj@mail.gvsu.edu'],
                 SUBJECT="Weekly Shopping List", SERVER = None, debugging = False):
 
         f = open(file_name)
@@ -58,12 +58,13 @@ class PS_Shopper_Email:
             SERVER = self.server
 
         message = """From: %s\nTo: %s\nSubject: %s\n\n%s
-        """ % (FROM, ", ".join(TO), SUBJECT, msg)
+        """ % (FROM, ", ".join(email_list), SUBJECT, msg)
 
         if self.get_setup_complete():
-            print("sendMail: setup completed")
+            if debugging:
+                print("sendMail: setup completed")
             try:
-                SERVER.sendmail(FROM, TO, message)
+                SERVER.sendmail(FROM, email_list, message)
                 if debugging:
                     print("Email Sent...(Maybe: There were atleast no exceptions thrown.)")
                     print("Message Data: " + message)
@@ -71,7 +72,8 @@ class PS_Shopper_Email:
                 traceback.print_exc()
 
         else:
-            print("sendMail: setup no complete")
+            if debugging:
+                print("sendMail: setup no complete")
             try:
                 self.set_up()
             except:
@@ -99,7 +101,8 @@ class PS_Shopper_Email:
                 traceback.print_exc()
 
         else:
-            print("sendMail: setup no complete")
+            if debugging:
+                print("sendMail: setup no complete")
             try:
                 self.set_up()
             except:
