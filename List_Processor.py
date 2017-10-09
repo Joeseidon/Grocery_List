@@ -28,7 +28,8 @@ class ListProcessor:
         except:
             return False
         return True
-
+    def getCurrentList(self):
+        return current_list
     def determine_needed_items(self,debugging = False):
         #Update weeks past for all items since a week should have passed since
             # the last time this script was run
