@@ -1,9 +1,14 @@
 import sys
 import os
 import json
+from item import *
 
+global dataload
 def main():
+    global dataload
+    dataload = False
     filename = ""
+    currentItemlist = []
     choice_execution = {1:getFileName,2:listItems,3:removeItem,4:addItem,5:list_json_files,6:exit}
     while True:
         mainMenu = """\tChoose File      ->  1
@@ -19,8 +24,15 @@ def main():
                 choice = int(raw_input("Please choose a valid option: "))
             if(choice>1 and choice<5):
                 choice_execution[choice](filename)
+            elif(choice == 2):
+                choice_execution[choice](currentItemlist)
             elif(choice==1):
                 filename = choice_execution[choice]()
+                currentItemlist = JSONdata_to_itemlist(filename=filename)
+                if currentItemlist == None:
+                    dataload = False
+                else:
+                    dataload = True
             elif(choice == 5 or choice == 6):
                 choice_execution[choice]()
         except:
@@ -33,6 +45,36 @@ def list_json_files():
         name = file.split('.')
         if(name[1] == 'json'):
             print(file)
+
+def JSONdata_to_itemlist(filename):
+    rtnList = []
+    try:
+        with open(filename,'r') as f:
+            data = json.load(f)
+
+        for i in data["PastItems"]:
+            r = item(name=i["name"],quantity=i["quantity"],
+                        frequency=i["frequency"],wW=i["weeksWithout"],
+                        units_cont = i["unitType"])
+            rtnList.append(r)
+    except:
+        print("No JSON data found.")
+    return rtnList
+
+def itemlist_to_JSONdatafile(filename, itemlist):
+    newListJson = []
+    for i in itemlist:
+        newListJson.append(
+            {"weeksWithout": i.get_weeks_past(),
+             "frequency"   : i.get_frequency(),
+             "quantity"    : i.get_quantity(),
+             "name"        : i.get_name(),
+             "unitType"    : i.get_unitType()
+        })
+    newDic = {"PastItems":newListJson}
+    with open(filename, 'w') as f:
+        json.dump(newDic, f)
+
 
 def addItem(filename):
     itemData = {"weeksWithout": 0, "frequency": 0,"quantity" : 0,"name" : "", "unitType": ""}
@@ -77,17 +119,10 @@ def addItem(filename):
         except:
             newlist=[itemData]
             json.dump({"PastItems":newlist},f)
-def listItems(filename):
-    with open(filename, 'r') as f:
-        try:
-            data = json.load(f)
-            if data:
-                for i in data["PastItems"]:
-                    item_desc = """\n%s\n\tUnits: %s\n\tQuantity: %s\n\tFrequency: %s\n\tWeeks Without: %s""" %(i["name"],i["unitType"], i["quantity"], i["frequency"],i["weeksWithout"])
-                    print(item_desc)
-        except:
-            print("No JSON structure detected.")
-    f.close()
+def listItems(items):
+    if dataload:
+        for item in items:
+            print(item.toString()+"\n")
 
 def removeItem(filename):
     answer = raw_input("Enter name of item to be removed: ")
