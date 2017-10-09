@@ -9,7 +9,6 @@ from oauth2client import client
 from oauth2client import tools
 from oauth2client.file import Storage
 
-#from file_info import *
 from gDrive_auth import *
 from gDrive_info import *
 import smtplib

@@ -3,6 +3,7 @@ import os
 import json
 
 def main():
+    filename = ""
     choice_execution = {1:getFileName,2:listItems,3:removeItem,4:addItem,5:list_json_files,6:exit}
     while True:
         mainMenu = """\tChoose File      ->  1
@@ -11,7 +12,7 @@ def main():
                     \n\tEnter Item       ->  4
                     \n\tList JSON Files  ->  5
                     \n\tExit Program     ->  6"""
-        print("Main Menu:\n"+mainMenu)
+        print("Main Menu: (Target file = %s)\n"%(filename)+mainMenu)
         try:
             choice = int(raw_input("What are you here to do?: "))
             while not (choice > 0 and choice < 7):
@@ -20,7 +21,7 @@ def main():
                 choice_execution[choice](filename)
             elif(choice==1):
                 filename = choice_execution[choice]()
-            else:
+            elif(choice == 5 or choice == 6):
                 choice_execution[choice]()
         except:
             print("Error: Invalid Entry\n\n")
@@ -101,6 +102,7 @@ def removeItem(filename):
                     del data["PastItems"][data["PastItems"].index(item)]
             #newDic = {"PastItems":newList}
             f.seek(0)
+            f.truncate()
             #json.dump(newDic,f)
             json.dump(data,f)
             f.close()
