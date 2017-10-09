@@ -6,6 +6,17 @@ class item:
     unitType = ""
 
     def __init__(self, name ="Unknown", quantity = 1, frequency = 1,wW=0, units_cont="na"):
+        '''
+		Description: item object initialization
+		Parameters:
+			name: item name
+			quantity: units of item need
+			frequency: how often the item is needed in weeks
+			wW = weeks that have passed without the item.
+			units_cont: the units of container count used to measure
+				units of this item
+		'''
+
         self.name = name
         self.quantity = quantity
         self.frequency = frequency
@@ -23,11 +34,16 @@ class item:
         print("\tResult: "+str(result))
         return result
 
-    ##This fucntion looks at the frequnecy of need for this product. It then
-    ##looks to see how many weeks have past. If it is time to order the item
-    ##true will be return. The weeks_past will not be reset because there is
-    ##no guarente the item makes it to the list at this point.
     def needed(self):
+        '''
+		Description: This fucntion looks at the frequnecy of need
+			for this product. It then looks to see how many weeks
+			have past. If it is time to order the item true will be
+			return. The weeks_past will not be reset because there is
+			no guarente the item makes it to the list at this point.
+		Returns:
+			A truth value to indicate if the file is needed this week.
+		'''
         if(self.weeks_past >= self.frequency):
             return True
         else:

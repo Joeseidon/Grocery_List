@@ -162,10 +162,10 @@ class ListProcessor:
         for i in self.past_items:
             newListJson.append(
                 {"weeksWithout": i.get_weeks_past(),
-                "frequency": i.get_frequency(),
-            	 "quantity": i.get_quantity(),
-            	 "name": i.get_name(),
-                 "unitType": i.get_unitType()
+                 "frequency"   : i.get_frequency(),
+            	 "quantity"    : i.get_quantity(),
+            	 "name"        : i.get_name(),
+                 "unitType"    : i.get_unitType()
             })
         newDic = {"PastItems":newListJson}
         with open(self.NEEDED_ITEMS_JSON, 'w') as f:
