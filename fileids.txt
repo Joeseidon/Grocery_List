@@ -1,5 +1,0 @@
-Name: Test Grocier List
-	MemeType: application/vnd.google-apps.document
-	ID: 1BDiJ0Dzjdd-Tvdo69KMjAjbEpL4j6fLPSsuhRrzgrZ0
-	Description: NONE
-	DownloadURL: NONE

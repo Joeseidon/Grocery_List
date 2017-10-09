@@ -34,7 +34,7 @@ Contacts = {
     }
 
 debug = False
-perform_notify = False
+perform_notify = True
 detail_modification_test = True
 
 connection_status = {"gDrive": False, "email": False, "phone": False}
