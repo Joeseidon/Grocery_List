@@ -17,9 +17,7 @@ class EmployeeNotification:
         except:
             return False
     def notify_Employee(self, text_file, contacts,
-                            connection_status, debugging = False):
-        subject = """Time to review next weeks shopping list.
-                        Check your eamil for recommendations."""
+                            connection_status, subject, debugging = False):
         if connection_status["phone"]:
             self.phone.sendText(recipient_list = contacts["Phone_Contacts"],
                                     msg=subject, debug = debugging)

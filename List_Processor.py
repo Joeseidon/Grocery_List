@@ -103,7 +103,8 @@ class ListProcessor:
                     and not line == None):
                 if("Everything below the line will not be ordered (for copy & paste - previous weeks)" in line):
                     break
-                print("Line of Intrest: "+line)
+                if debugging:
+                    print("Line of Intrest: "+line)
                 quantity = ""
                 index = 0
                 for char in line:

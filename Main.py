@@ -34,7 +34,8 @@ Contacts = {
     }
 
 debug = False
-perform_notify = True
+perform_notify = False
+detail_modification_test = True
 
 connection_status = {"gDrive": False, "email": False, "phone": False}
 
@@ -86,11 +87,21 @@ def main():
 
     #used to limmit email and text during debugging and development
     if perform_notify and success:
+        subject_text = """Time to review next weeks shopping list.
+                            Check your email for recommendations."""
         #Notify individuals that the list should be looked at.
         contact_eng.notify_Employee(text_file = RECOMMENDATIONS_FILE_NAME,
                                         contacts = Contacts,
                                         connection_status = connection_status,
-                                        debugging=debug)
+                                        subject = subject_text, debugging=debug)
+    if detail_modification_test:
+        print("Connection Status: ")
+        print(connection_status)
+        print("\n\n")
+        print("File Download (success): ")
+        print(resp)
+        print("\n\n")
+        print("List processing (success): "+str(success))
 
 if __name__ == '__main__':
     main()
