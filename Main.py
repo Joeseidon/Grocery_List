@@ -21,25 +21,36 @@ try:
 except ImportError:
     flags = None
 
-SCOPES = 'https://www.googleapis.com/auth/drive'
-TARGET_FILE_NAME = "Test Grocier List"
-EXPORT_FILE_NAME = "GroceryList.txt"
-RECOMMENDATIONS_FILE_NAME = "neededItems.txt"
-NEEDED_ITEMS_JSON = "Common_Items.json"
+def import_settings():
+    with open("settings.json", "r") as f:
+        data = json.load(f)
 
-Contacts = {
-    "Email_Contacts" : ['cutinoj@mail.gvsu.edu','joseph.cutino@psware.com'],
-    "Phone_Contacts" : ['5863821908']
-    }
+        global SCOPES
+        global TARGET_FILE_NAME
+        global EXPORT_FILE_NAME
+        global RECOMMENDATIONS_FILE_NAME
+        global NEEDED_ITEMS_JSON
+        global Contacts
+        SCOPES = data['Scope']
+        TARGET_FILE_NAME = data['GDrive_Target']
+        EXPORT_FILE_NAME = data['Grocery_List_Export']
+        RECOMMENDATIONS_FILE_NAME = data['Item_Recommendations']
+        NEEDED_ITEMS_JSON = data['Common_Items_JSON']
+        Contacts = data['Contacts']
 
-debug = False
-perform_notify = False
-detail_modification_test = False
-testing_upload = False
-
-connection_status = {"gDrive": False, "email": False, "phone": False}
+        global debug
+        global perform_notify
+        global detail_modification_test
+        global testing_upload
+        debug = data["script_permissions"]["debug"]
+        perform_notify = data["script_permissions"]["perform_notify"]
+        detail_modification_test = data["script_permissions"]["mod_testing"]
+        testing_upload = data["script_permissions"]["upload_testing"]
 
 def main():
+    import_settings()
+    #Used to confirm connections have been established before actions are taken
+    connection_status = {"gDrive": False, "email": False, "phone": False}
     #Establish GDrive service
     try:
         connection_status["gDrive"] = True

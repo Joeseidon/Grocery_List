@@ -1,0 +1,22 @@
+{
+  "GDrive_Target": "Test Grocier List",
+  "Grocery_List_Export": "GroceryList.txt",
+  "Item_Recommendations": "neededItems.txt",
+  "Common_Items_JSON": "Common_items.json",
+  "Contacts": {
+    "Email_Contacts": [
+      "cutinoj@mail.gvsu.edu",
+      "joseph.cutino@psware.com"
+    ],
+    "Phone_Contacts": [
+      "5863821908"
+    ]
+  },
+  "Scope": "https://www.googleapis.com/auth/drive",
+  "script_permissions": {
+    "debug": 0,
+    "perform_notify": 0,
+    "mod_testing": 0,
+    "upload_testing": 0
+  }
+}

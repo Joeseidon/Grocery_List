@@ -16,6 +16,7 @@ class ListProcessor:
         self.Current_Date = datetime.datetime.today().strftime('%m/%d/%y')
         self.current_list = []
         self.needed_items = []
+        self.items_to_remove = []
         self.past_items = []
 
     def process_list(self,debug=False):
@@ -33,7 +34,9 @@ class ListProcessor:
     def determine_needed_items(self,debugging = False):
         #Update weeks past for all items since a week should have passed since
             # the last time this script was run
-        self.update_Weeks_Past(self.past_items)
+
+            #Might be better to increment only those that are not found
+        #self.update_Weeks_Past(self.past_items)
 
         #Used to convert fractions from textfile to a usable formatter_class
         _u = lambda t: t.decode('UTF-8', 'replace') if isinstance(t,str) else t
@@ -56,7 +59,6 @@ class ListProcessor:
                                 found = True
                                 break
                         except:
-
                             if item.get_name() in _u(i.get_name()):
                                 found = True
                                 break
@@ -64,12 +66,15 @@ class ListProcessor:
                         print("######Found(False = Needed Item)########")
                         print found
                     if not found:
+                        item.increment_weeks_past()
                         if(item.needed()):
                             if debugging:
                                 print("needed: "+item.get_name())
                             self.needed_items.append(item)
                             item.reset_weeks_past()
                     else:
+                        if not(item.needed()):
+                            self.items_to_remove.append(item)
                         found = False
                 if debugging:
                     print"###############################after########################"
@@ -149,6 +154,10 @@ class ListProcessor:
             file.write("These recommendations are for the delivery for the week of: "+self.List_Date+"\n")
         for i in itemlist:
             file.write(i.toString()+"\n")
+        if self.items_to_remove:
+            file.write("\nThe following items appear to be unneeded for this next week based on past habits: \n")
+            for item in self.items_to_remove:
+                file.write(item.toString()+"\n")
         file.close()
 
     def update_Weeks_Past(self,p_itemlist):
