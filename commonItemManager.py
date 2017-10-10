@@ -61,7 +61,7 @@ class ItemManager:
 
     def listItems(self):
         if self.dataloaded or self.datacreated:
-            print("List Items: ")
+            print("\nCurrent List: ")
             for item in self.currentItemList:
                 print("\t"+item.toString()+"\n")
         else:
@@ -117,7 +117,7 @@ class ItemManager:
             answer = raw_input("Quantity (integer): ")
             if answer.isdigit():
                 valid = True
-        itemData["quantity"]=answer
+        itemData["quantity"] = int(answer)
         valid = False
 
         while not valid:
@@ -125,7 +125,7 @@ class ItemManager:
             if answer.isdigit():
                 valid = True
 
-        itemData["frequency"]=answer
+        itemData["frequency"] = int(answer)
         valid = False
 
         r = item(name=itemData["name"],quantity=itemData["quantity"],
@@ -198,12 +198,16 @@ class ItemManager:
 
 def main():
     manager = ItemManager()
+    if(len(sys.argv) == 1):
+        #No file specified. Default to common_items.json used by the rest of the script
+        manager.initialize_file("Common_items.json")
+
     while True:
-        mainMenu = """\n\tChoose File      ->  1
-                    \n\tList JSON Files  ->  2
-                    \n\tList Items       ->  3
-                    \n\tAdd Items        ->  4
-                    \n\tRemove Items     ->  5
+        mainMenu = """\n\tList Items       ->  1
+                    \n\tAdd Items        ->  2
+                    \n\tRemove Items     ->  3
+                    \n\tSwitch File      ->  4
+                    \n\tList JSON Files  ->  5
                     \n\tExit Program     ->  6\n"""
         print("Main Menu: (Target file = %s)\n%s"%(manager.getTargetFile(),mainMenu))
         invalid = True
@@ -215,19 +219,19 @@ def main():
                 valid = True
         while not (choice > 0 and choice < 7):
             choice = int(raw_input("Please choose a valid option: "))
-        if(choice == 1):
+        if(choice == 4):
             target_file = manager.getFileName()
             manager.initialize_file(target_file)
             if manager.dataLoaded():
                 print("Failed to load JSON data.")
-        elif(choice == 2):
+        elif(choice == 5):
             manager.list_json_files()
-        elif(choice == 3):
+        elif(choice == 1):
             manager.listItems()
-        elif(choice == 4):
+        elif(choice == 2):
             while manager.continueEditing(adding = True):
                 pass
-        elif(choice == 5):
+        elif(choice == 3):
             while manager.continueEditing(removing = True):
                 pass
         elif(choice == 6):

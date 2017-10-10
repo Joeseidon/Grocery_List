@@ -25,13 +25,7 @@ class item:
 
     ##Make items comparable
     def __eq__(self, other):
-        print("Comparison:")
-        print("\t"+self.get_name())
-        print("\t"+other.get_name())
-
         result = self.get_name() == other.get_name()
-
-        print("\tResult: "+str(result))
         return result
 
     def needed(self):

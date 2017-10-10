@@ -61,7 +61,7 @@ class ListProcessor:
                                 found = True
                                 break
                     if debugging:
-                        print("######Result########")
+                        print("######Found(False = Needed Item)########")
                         print found
                     if not found:
                         if(item.needed()):
@@ -104,8 +104,6 @@ class ListProcessor:
                     and not line == None):
                 if("Everything below the line will not be ordered (for copy & paste - previous weeks)" in line):
                     break
-                if debugging:
-                    print("Line of Intrest: "+line)
                 quantity = ""
                 index = 0
                 for char in line:

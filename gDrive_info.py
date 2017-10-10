@@ -17,6 +17,7 @@ import json
 
 import requests
 import StringIO
+import urllib3
 
 
 def print_drive_contents(service, pages = 10, print_text = True, json = False):
@@ -94,24 +95,32 @@ def print_file_data(drive_file,tofile=False,filename = 'fileids.txt'):
     print('Name: {0}\n\tMemeType: {1}\n\tID: {2}\n\tDescription: {3}\n\tDownloadURL: {4}'.format(drive_file['name'], drive_file['mimeType'], drive_file['id'], description, downloadURL))
 
 def upload_file(fileObj,drive_service,new_text_file,debugging=False):
-    try:
+    '''try:
         # File's new content.
         media_body = MediaFileUpload(
-            new_text_file, mimetype='application/vnd.google-apps.document', resumable=True)
+            new_text_file, mimetype="text/plain", resumable=True)
         if debugging:
             print("media_body created.")
         # Send the request to the API.
-        updated_file = service.files().update(
-            fileId=fileObj['file_id'],
+        updated_file = drive_service.files().update(
+            fileId=fileObj['id'],
             body=fileObj,
-            newRevision=True,
             media_body=media_body).execute()
         return updated_file
 
     except errors.HttpError, error:
         print ('An error occurred: %s' % error)
-        return None
+        return None'''
+    with open(new_text_file,"r") as fh:
+        mydata = {'some':'data'}
+        response = httplib2.Http().request(uri="https://www.googleapis.com/drive/v3/files/1BDiJ0Dzjdd-Tvdo69KMjAjbEpL4j6fLPSsuhRrzgrZ0?keepRevisionForever=true&supportsTeamDrives=true&key=AIzaSyBQHJRYRZKK1QovxtStf_QujyW8n_MJ8m4",
+                                            body= json.dumps(mydata),
+                                            method="POST",
+                                            headers={'content-type':'application/json'})[0]
 
+
+
+        return response
 def download_file(fileObj,drive_service,exportFile='GroceryList.txt',debugging = False):
     '''
     Description: This function uses an HTTP request to pull the
