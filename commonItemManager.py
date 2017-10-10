@@ -22,13 +22,14 @@ class ItemManager:
             dataload = True
 
     def list_json_files(self):
+        print("\nJSON Files in the Current Directory:")
         cur_dir = os.getcwd()
         file_list = os.listdir(cur_dir)
         for file in file_list:
             name = file.split('.')
             if(name[1] == 'json'):
-                print(file)
-
+                print("\t"+file)
+        print("\n")
     def JSONdata_to_itemlist(self):
         try:
             with open(self.target_file,'r') as f:
@@ -42,7 +43,6 @@ class ItemManager:
                         self.dataloaded = True
         except:
             print("No JSON data found.")
-
 
     def itemlist_to_JSONdatafile(self):
         newListJson = []
@@ -199,14 +199,20 @@ class ItemManager:
 def main():
     manager = ItemManager()
     while True:
-        mainMenu = """\tChoose File      ->  1
+        mainMenu = """\n\tChoose File      ->  1
                     \n\tList JSON Files  ->  2
                     \n\tList Items       ->  3
                     \n\tAdd Items        ->  4
                     \n\tRemove Items     ->  5
-                    \n\tExit Program     ->  6"""
+                    \n\tExit Program     ->  6\n"""
         print("Main Menu: (Target file = %s)\n%s"%(manager.getTargetFile(),mainMenu))
-        choice = int(raw_input("What are you here to do?: "))
+        invalid = True
+        while invalid:
+            try:
+                choice = int(raw_input("What are you here to do?: "))
+                invalid = False
+            except:
+                valid = True
         while not (choice > 0 and choice < 7):
             choice = int(raw_input("Please choose a valid option: "))
         if(choice == 1):
@@ -226,6 +232,6 @@ def main():
                 pass
         elif(choice == 6):
             sys.exit(0)
-            
+
 if __name__ == '__main__':
     main()

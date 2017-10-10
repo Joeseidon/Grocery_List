@@ -33,7 +33,7 @@ Contacts = {
     }
 
 debug = False
-perform_notify = True
+perform_notify = False
 detail_modification_test = True
 
 connection_status = {"gDrive": False, "email": False, "phone": False}
@@ -92,6 +92,9 @@ def main():
                                         contacts = Contacts,
                                         connection_status = connection_status,
                                         subject = subject_text, debugging=debug)
+    content = upload_file(target_file,service,"neededItems.txt",debugging=True)
+    print(content)
+
     if detail_modification_test:
         print("Connection Status: ")
         print(connection_status)

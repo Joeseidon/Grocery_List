@@ -8,6 +8,7 @@ from oauth2client import tools
 from oauth2client.file import Storage
 from apiclient import errors
 from apiclient import http
+from apiclient.http import MediaFileUpload
 
 import io
 from apiclient.http import MediaIoBaseDownload
@@ -91,6 +92,25 @@ def print_file_data(drive_file,tofile=False,filename = 'fileids.txt'):
             file.write('Name: {0}\n\tMemeType: {1}\n\tID: {2}\n\tDescription: {3}\n\tDownloadURL: {4}'.format(drive_file['name'], drive_file['mimeType'], drive_file['id'], description, downloadURL))
             file.close()
     print('Name: {0}\n\tMemeType: {1}\n\tID: {2}\n\tDescription: {3}\n\tDownloadURL: {4}'.format(drive_file['name'], drive_file['mimeType'], drive_file['id'], description, downloadURL))
+
+def upload_file(fileObj,drive_service,new_text_file,debugging=False):
+    try:
+        # File's new content.
+        media_body = MediaFileUpload(
+            new_text_file, mimetype='application/vnd.google-apps.document', resumable=True)
+        if debugging:
+            print("media_body created.")
+        # Send the request to the API.
+        updated_file = service.files().update(
+            fileId=fileObj['file_id'],
+            body=fileObj,
+            newRevision=True,
+            media_body=media_body).execute()
+        return updated_file
+
+    except errors.HttpError, error:
+        print ('An error occurred: %s' % error)
+        return None
 
 def download_file(fileObj,drive_service,exportFile='GroceryList.txt',debugging = False):
     '''
