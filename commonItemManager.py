@@ -201,6 +201,7 @@ def main():
     if(len(sys.argv) == 1):
         #No file specified. Default to common_items.json used by the rest of the script
         manager.initialize_file("Common_items.json")
+        manager.initialize_setup("settings.json")
 
     while True:
         mainMenu = """\n\tList Items       ->  1
