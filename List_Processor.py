@@ -73,8 +73,11 @@ class ListProcessor:
                             self.needed_items.append(item)
                             item.reset_weeks_past()
                     else:
+                        item.increment_weeks_past()
                         if not(item.needed()):
                             self.items_to_remove.append(item)
+                        else:
+                            item.reset_weeks_past()
                         found = False
                 if debugging:
                     print"###############################after########################"

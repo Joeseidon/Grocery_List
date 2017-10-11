@@ -1,5 +1,5 @@
 {
-  "GDrive_Target": "Test Grocier List",
+  "GDrive_Target": "psware grocery list",
   "Grocery_List_Export": "GroceryList.txt",
   "Item_Recommendations": "neededItems.txt",
   "Common_Items_JSON": "Common_items.json",
@@ -17,6 +17,6 @@
     "debug": 0,
     "perform_notify": 0,
     "mod_testing": 0,
-    "upload_testing": 1
+    "upload_testing": 0
   }
 }
