@@ -19,6 +19,10 @@ import requests
 import StringIO
 import urllib3
 
+#For upload
+from pydrive.auth import GoogleAuth
+from pydrive.drive import GoogleDrive
+
 
 def print_drive_contents(service, pages = 10, print_text = True, json = False):
     '''
@@ -110,17 +114,28 @@ def upload_file(fileObj,drive_service,new_text_file,debugging=False):
 
     except errors.HttpError, error:
         print ('An error occurred: %s' % error)
-        return None'''
+        return None
     with open(new_text_file,"r") as fh:
         mydata = {'some':'data'}
         response = httplib2.Http().request(uri="https://www.googleapis.com/drive/v3/files/1BDiJ0Dzjdd-Tvdo69KMjAjbEpL4j6fLPSsuhRrzgrZ0?keepRevisionForever=true&supportsTeamDrives=true&key=AIzaSyBQHJRYRZKK1QovxtStf_QujyW8n_MJ8m4",
                                             body= json.dumps(mydata),
                                             method="POST",
                                             headers={'content-type':'application/json'})[0]
+    '''
 
+    '''PyDrive used here instead of google-drive-client directly'''
+    gauth = GoogleAuth()
+    gauth.LocalWebserverAuth()
+    drive = GoogleDrive(gauth)
+    '''
+    new_file = drive.CreateFile({'title':'PyDriveTestGdoc', 'mimeType':'application/vnd.google-apps.document'})
+    new_file.SetContentString('Hello Google doc test')
+    new_file.Upload()
+    '''
+    file1 = drive.CreateFile({'id':fileObj['id']})
+    file1.GetContentFile('pyDriveDownloadTest.txt',mimetype='text/plain')
 
-
-        return response
+    return "Uploaded"
 def download_file(fileObj,drive_service,exportFile='GroceryList.txt',debugging = False):
     '''
     Description: This function uses an HTTP request to pull the

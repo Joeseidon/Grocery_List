@@ -17,6 +17,6 @@
     "debug": 0,
     "perform_notify": 0,
     "mod_testing": 0,
-    "upload_testing": 0
+    "upload_testing": 1
   }
 }
