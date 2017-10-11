@@ -124,18 +124,18 @@ def upload_file(fileObj,drive_service,new_text_file,debugging=False):
     '''
 
     '''PyDrive used here instead of google-drive-client directly'''
-    gauth = GoogleAuth()
+    '''gauth = GoogleAuth()
     gauth.LocalWebserverAuth()
     drive = GoogleDrive(gauth)
-    '''
+
     new_file = drive.CreateFile({'title':'PyDriveTestGdoc', 'mimeType':'application/vnd.google-apps.document'})
     new_file.SetContentString('Hello Google doc test')
     new_file.Upload()
-    '''
+
     file1 = drive.CreateFile({'id':fileObj['id']})
     file1.GetContentFile('pyDriveDownloadTest.txt',mimetype='text/plain')
 
-    return "Uploaded"
+    return "Uploaded"'''
 def download_file(fileObj,drive_service,exportFile='GroceryList.txt',debugging = False):
     '''
     Description: This function uses an HTTP request to pull the
