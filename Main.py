@@ -26,12 +26,6 @@ try:
     parser.add_argument("-n","--notify", help="Bypass daily action restrictions to send clear list notification.",
                             action = "store_true")
     args = parser.parse_args()
-    '''global override
-    if(args.override):
-        override = True
-    else:
-        override = False'''
-    #flags = argparse.ArgumentParser(parents=[tools.argparser]).parse_args()
 except ImportError:
     flags = None
 
@@ -62,8 +56,8 @@ def import_settings():
         testing_upload = data["script_permissions"]["upload_testing"]
 
         global date
-        date = date.today()
         global day
+        date = date.today()
         day = calendar.day_name[date.weekday()]
 
 def download_Content(service, connection_status):
