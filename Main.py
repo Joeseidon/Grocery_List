@@ -15,9 +15,23 @@ import smtplib
 from gDrive_notification import *
 from List_Processor import *
 
+from datetime import date
+import calendar
+
 try:
     import argparse
-    flags = argparse.ArgumentParser(parents=[tools.argparser]).parse_args()
+    parser = argparse.ArgumentParser()
+    parser.add_argument("-o","--override", help="Bypass daily action restricitons to commence list processing.",
+                            action = "store_true")
+    parser.add_argument("-n","--notify", help="Bypass daily action restrictions to send clear list notification.",
+                            action = "store_true")
+    args = parser.parse_args()
+    '''global override
+    if(args.override):
+        override = True
+    else:
+        override = False'''
+    #flags = argparse.ArgumentParser(parents=[tools.argparser]).parse_args()
 except ImportError:
     flags = None
 
@@ -47,25 +61,12 @@ def import_settings():
         detail_modification_test = data["script_permissions"]["mod_testing"]
         testing_upload = data["script_permissions"]["upload_testing"]
 
-def main():
-    import_settings()
-    #Used to confirm connections have been established before actions are taken
-    connection_status = {"gDrive": False, "email": False, "phone": False}
-    #Establish GDrive service
-    try:
-        connection_status["gDrive"] = True
-        service, flags = init(argv = '', name = 'drive', version = 'v3',
-                                    doc = '__doc__', filename = '__file__',
-                                    scope = SCOPES)
-    except:
-        connection_status["gDrive"] = False
+        global date
+        date = date.today()
+        global day
+        day = calendar.day_name[date.weekday()]
 
-    #Establish email and phone server connections
-    contact_eng = EmployeeNotification()
-    connection_status["email"] = contact_eng.establish_email_connection()
-    connection_status["phone"] = contact_eng.establish_phone_connection()
-
-
+def download_Content(service, connection_status):
     if connection_status["gDrive"]:
         #Locate the needed grocery list
         target_file = find_file(service, file_title = TARGET_FILE_NAME, debugging = debug)
@@ -78,7 +79,9 @@ def main():
         #Retrive file content. Saved to GroceryList.txt
         resp, content = download_file(target_file, service, debugging = debug,
                                         exportFile = EXPORT_FILE_NAME)
+    return resp
 
+def process_Content(service, connection_status, downloadResp):
     #Perform list processing with the most up to date list
     try:
         list_explorer = ListProcessor(target_list = EXPORT_FILE_NAME,
@@ -89,6 +92,7 @@ def main():
         else:
             print(e.message)
 
+    success = False
     try:
         success = list_explorer.process_list(debug = debug)
     except Exception as e:
@@ -96,6 +100,9 @@ def main():
         if perform_notify and connection_status["email"]:
             contact_eng.send_error_msg(Contacts, e.msg, connections= connection_status)
 
+    return success
+
+def notify_logic(connection_status, listProcessResult, contact_eng):
     #used to limmit email and text during debugging and development
     if perform_notify and success:
         subject_text = """Time to review next weeks shopping list.\nCheck your email for recommendations."""
@@ -104,9 +111,47 @@ def main():
                                         contacts = Contacts,
                                         connection_status = connection_status,
                                         subject = subject_text, debugging=debug)
-    if testing_upload:
+def upload_Content(service, connection_status, listProcessResult):
+    if testing_upload and connection_status["gDrive"] and listProcessResult:
         content = upload_file(target_file,service,"Common_Items.json",debugging=True)
         print(content)
+
+def main():
+    import_settings()
+    #Used to confirm connections have been established before actions are taken
+    connection_status = {"gDrive": False, "email": False, "phone": False}
+    #Establish GDrive service
+    try:
+        connection_status["gDrive"] = True
+        service, service_flags = init(argv = '', name = 'drive', version = 'v3',
+                                    doc = '__doc__', filename = '__file__',
+                                    scope = SCOPES)
+    except:
+        connection_status["gDrive"] = False
+
+    #Establish email and phone server connections
+    contact_eng = EmployeeNotification()
+    connection_status["email"] = contact_eng.establish_email_connection()
+    connection_status["phone"] = contact_eng.establish_phone_connection()
+
+    if day == "Friday" or args.override:
+        resp = download_Content(service = service, connection_status = connection_status)
+
+        success = process_Content(service = service, connection_status = connection_status, downloadResp = resp)
+
+        notify_logic(connection_status = connection_status, listProcessResult = success, contact_eng = contact_eng)
+
+        upload_Content(service = service, connection_status = connection_status, listProcessResult = success)
+
+    elif day == "Monday" or args.notify:
+        #notify employee to clear list after delivery
+        str_msg = "This weeks groceries should have been delivered. If so, clear the google doc."
+        if perform_notify or args.notify:
+            contact_eng.text_Employee(contacts = Contacts,
+                                            connection_status = connection_status,
+                                            text_msg = str_msg, debugging=debug)
+    else:
+        print("Action not needed today. Use command line args to override code sequence.")
 
     if detail_modification_test:
         print("Connection Status: ")

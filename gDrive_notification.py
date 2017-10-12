@@ -31,6 +31,12 @@ class EmployeeNotification:
             return True
         except:
             return False
+    def text_Employee(self, contacts,connection_status, text_msg, debugging = False):
+        if connection_status["phone"]:
+            self.phone.sendText(recipient_list = contacts["Phone_Contacts"],
+                                    msg=text_msg, debug = debugging)
+
+
     def notify_Employee(self, text_file, contacts,
                             connection_status, subject, debugging = False):
         '''
@@ -60,5 +66,5 @@ class EmployeeNotification:
 			msg: error message
 			connections: status of server connections
 		'''
-        if connection_status["email"]:
+        if connections["email"]:
             self.email.sendMail(msg, TO=contacts, SUBJECT = "Script Error")
