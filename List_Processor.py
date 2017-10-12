@@ -32,12 +32,6 @@ class ListProcessor:
     def getCurrentList(self):
         return current_list
     def determine_needed_items(self,debugging = False):
-        #Update weeks past for all items since a week should have passed since
-            # the last time this script was run
-
-            #Might be better to increment only those that are not found
-        #self.update_Weeks_Past(self.past_items)
-
         #Used to convert fractions from textfile to a usable formatter_class
         _u = lambda t: t.decode('UTF-8', 'replace') if isinstance(t,str) else t
 
