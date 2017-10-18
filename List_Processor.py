@@ -46,7 +46,7 @@ class ListProcessor:
                 for item in self.past_items:
                     for i in self.current_list:
                         if debugging:
-                            print str(count)+"::"+"comparing: " + str(item) +" and "+str(i)
+                            print(str(count)+"::"+"comparing: " + str(item) +" and "+str(i))
                         count+=1
                         try:
                             if item.get_name() in i.get_name():
@@ -74,7 +74,7 @@ class ListProcessor:
                             item.reset_weeks_past()
                         found = False
                 if debugging:
-                    print"###############################after########################"
+                    print("###############################after########################")
                     self.print_items(self.needed_items)
             return self.needed_items
 
@@ -89,7 +89,7 @@ class ListProcessor:
             self.past_items.append(r)
 
         if debugging:
-            print"###############################Past#################################"
+            print("###############################Past#################################")
             self.print_items(self.past_items)
         self.old_list_read = True
 
@@ -121,7 +121,7 @@ class ListProcessor:
 
         file.close()
         if debugging:
-            print"###############################Current List#################################"
+            print("###############################Current List#################################")
             self.print_items(self.current_list)
         self.new_list_read = True
 
