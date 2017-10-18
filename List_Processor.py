@@ -58,7 +58,7 @@ class ListProcessor:
                                 break
                     if debugging:
                         print("######Found(False = Needed Item)########")
-                        print found
+                        print(found)
                     if not found:
                         item.increment_weeks_past()
                         if(item.needed()):
@@ -131,7 +131,7 @@ class ListProcessor:
 
     def print_items(self,listp):
         for item in listp:
-            print item
+            print(item)
 
     def list_out_of_date(self):
         list_d = time.strptime(self.List_Date, "%m/%d/%y")
