@@ -15,7 +15,7 @@
   "Scope": "https://www.googleapis.com/auth/drive",
   "script_permissions": {
     "debug": 0,
-    "perform_notify": 0,
+    "perform_notify": 1,
     "mod_testing": 0,
     "upload_testing": 0
   }
