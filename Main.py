@@ -98,7 +98,7 @@ def process_Content(service, connection_status, downloadResp):
 
 def notify_logic(connection_status, listProcessResult, contact_eng):
     #used to limmit email and text during debugging and development
-    if perform_notify and success:
+    if perform_notify and listProcessResult:
         subject_text = """Time to review next weeks shopping list.\nCheck your email for recommendations."""
         #Notify individuals that the list should be looked at.
         contact_eng.notify_Employee(text_file = RECOMMENDATIONS_FILE_NAME,
