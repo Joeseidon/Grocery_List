@@ -16,7 +16,7 @@ from apiclient.http import MediaIoBaseDownload
 import json
 
 import requests
-import StringIO
+#import StringIO
 import urllib3
 
 #For upload
