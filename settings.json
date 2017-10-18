@@ -6,12 +6,10 @@
   "Contacts": {
     "Email_Contacts": [
       "cutinoj@mail.gvsu.edu",
-      "joseph.cutino@psware.com",
-	  "matt.mead@psware.com"
+      "joseph.cutino@psware.com"
     ],
     "Phone_Contacts": [
-      "5863821908",
-	  "2315573223"
+      "5863821908"
     ]
   },
   "Scope": "https://www.googleapis.com/auth/drive",
