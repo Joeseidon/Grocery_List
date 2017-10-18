@@ -12,7 +12,7 @@ class PS_Shopper_Email:
     def __init__(self):
         try:
             self.set_up()
-        except Exception, e:
+        except:
             print("Email Setup Error")
             traceback.print_exc()
 
