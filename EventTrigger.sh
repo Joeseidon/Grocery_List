@@ -1,2 +1,2 @@
 #!/bin/sh
-python3 Main.py -n
+python3 Main.py -o
