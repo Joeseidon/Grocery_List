@@ -84,11 +84,11 @@ class ListProcessor:
         with open(abs_path, 'r') as f:
         	data = json.load(f)
 
-		for i in data["PastItems"]:
-			r = item(name=i["name"],quantity=i["quantity"],
-						frequency=i["frequency"],wW=i["weeksWithout"],
-						units_cont = i["unitType"])
-			self.past_items.append(r)
+            for i in data["PastItems"]:
+                r = item(name=i["name"],quantity=i["quantity"],
+                            frequency=i["frequency"],wW=i["weeksWithout"],
+                            units_cont = i["unitType"])
+                self.past_items.append(r)
 
 		if debugging:
 			print("###############################Past#################################")
