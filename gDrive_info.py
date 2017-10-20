@@ -160,11 +160,11 @@ def download_file(fileObj,drive_service,exportFile='GroceryList.txt',debugging =
     if debugging:
         print("Status: " + str(resp.status))
 
+    #Path update
     if not resp.status == '400':
-		#Path update
-		abs_path = os.path.join(os.path.dirname(__file__), exportFile)
-		file = open(abs_path,'wb')
-		file.write(content)
+    	abs_path = os.path.join(os.path.dirname(__file__), exportFile)
+    	file = open(abs_path,'wb')
+    	file.write(content)
 
     return(resp, content)
 
