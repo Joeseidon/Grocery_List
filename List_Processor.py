@@ -79,55 +79,59 @@ class ListProcessor:
             return self.needed_items
 
     def generate_past_list(self,debugging = False):
-        with open(self.NEEDED_ITEMS_JSON, 'r') as f:
-            data = json.load(f)
+		#Path update
+		abs_path = os.path.join(os.path.dirname(__file__), self.NEEDED_ITEMS_JSON)
+		with open(abs_path, 'r') as f:
+			data = json.load(f)
 
-        for i in data["PastItems"]:
-            r = item(name=i["name"],quantity=i["quantity"],
-                        frequency=i["frequency"],wW=i["weeksWithout"],
-                        units_cont = i["unitType"])
-            self.past_items.append(r)
+		for i in data["PastItems"]:
+			r = item(name=i["name"],quantity=i["quantity"],
+						frequency=i["frequency"],wW=i["weeksWithout"],
+						units_cont = i["unitType"])
+			self.past_items.append(r)
 
-        if debugging:
-            print("###############################Past#################################")
-            self.print_items(self.past_items)
-        self.old_list_read = True
+		if debugging:
+			print("###############################Past#################################")
+			self.print_items(self.past_items)
+		self.old_list_read = True
 
     def generate_current_list(self,debugging = False):
-        bullet_list = False
-        file = open(self.CURRENT_LIST,"r")
-        for line in file:
-            if("Grocery List for Performance Software to be delivered" in line):
-                match = re.search('\d{2}/\d{2}/\d{2}',line)
-                self.List_Date = match.group(0)
-            if ((not("Grocery List for Performance Software to be delivered" in line))
-                    and not (line in ['\n', '\r\n', ' '])
-                    and not("----------------------" in line)
-                    and not line == None):
-                if("Everything below the line will not be ordered (for copy & paste - previous weeks)" in line):
-                    break
-                quantity = ""
-                index = 0
-                for char in line:
-                    if char.isdigit():
-                        index += 1
-                        quantity += char
-                    else:
-                        break
-                strItem = re.search('.+\S',line)
-                if not (strItem == None):
-                    i = item(name=strItem.group(0)[index:],quantity=quantity)
-                    self.current_list.append(i)
+		bullet_list = False
+		abs_path = os.path.join(os.path.dirname(__file__), self.CURRENT_LIST)
+		file = open(abs_path,"r")
+		for line in file:
+			if("Grocery List for Performance Software to be delivered" in line):
+				match = re.search('\d{2}/\d{2}/\d{2}',line)
+				self.List_Date = match.group(0)
+			if ((not("Grocery List for Performance Software to be delivered" in line))
+					and not (line in ['\n', '\r\n', ' '])
+					and not("----------------------" in line)
+					and not line == None):
+				if("Everything below the line will not be ordered (for copy & paste - previous weeks)" in line):
+					break
+				quantity = ""
+				index = 0
+				for char in line:
+					if char.isdigit():
+						index += 1
+						quantity += char
+					else:
+						break
+				strItem = re.search('.+\S',line)
+				if not (strItem == None):
+					i = item(name=strItem.group(0)[index:],quantity=quantity)
+					self.current_list.append(i)
 
-        file.close()
-        if debugging:
-            print("###############################Current List#################################")
-            self.print_items(self.current_list)
-        self.new_list_read = True
+		file.close()
+		if debugging:
+			print("###############################Current List#################################")
+			self.print_items(self.current_list)
+		self.new_list_read = True
 
     def clear_file(self,filename):
-        file = open(filename,"w")
-        file.truncate(0)
+		abs_path = os.path.join(os.path.dirname(__file__), filename)
+		file = open(abs_path,"w")
+		file.truncate(0)
 
     def print_items(self,listp):
         for item in listp:
@@ -142,39 +146,41 @@ class ListProcessor:
             return False
 
     def item_list_to_file(self,itemlist,filename="neededItems.txt"):
-        file = open(filename, "w")
-        if self.list_out_of_date():
-            file.write("The current list is out of date as of "
-                        +self.Current_Date+
-                        ".\nThe following recommendations are based on what is currently in the list.\n")
-        else:
-            file.write("These recommendations are for the delivery for the week of: "+self.List_Date+"\n")
-        for i in itemlist:
-            file.write(i.toString()+"\n")
-        if self.items_to_remove:
-            file.write("\nThe following items appear to be unneeded for this next week based on past habits: \n")
-            for item in self.items_to_remove:
-                file.write(item.toString()+"\n")
-        file.close()
+		abs_path = os.path.join(os.path.dirname(__file__), filename)
+		file = open(abs_path, "w")
+		if self.list_out_of_date():
+			file.write("The current list is out of date as of "
+						+self.Current_Date+
+						".\nThe following recommendations are based on what is currently in the list.\n")
+		else:
+			file.write("These recommendations are for the delivery for the week of: "+self.List_Date+"\n")
+		for i in itemlist:
+			file.write(i.toString()+"\n")
+		if self.items_to_remove:
+			file.write("\nThe following items appear to be unneeded for this next week based on past habits: \n")
+			for item in self.items_to_remove:
+				file.write(item.toString()+"\n")
+		file.close()
 
     def update_Weeks_Past(self,p_itemlist):
         for p_item in p_itemlist:
             p_item.increment_weeks_past()
 
     def rewrite_Common_Items_File(self):
-        #update json structure for item changes made during processing
-        newListJson = []
-        for i in self.past_items:
-            newListJson.append(
-                {"weeksWithout": i.get_weeks_past(),
-                 "frequency"   : i.get_frequency(),
-            	 "quantity"    : i.get_quantity(),
-            	 "name"        : i.get_name(),
-                 "unitType"    : i.get_unitType()
-            })
-        newDic = {"PastItems":newListJson}
-        with open(self.NEEDED_ITEMS_JSON, 'w') as f:
-            json.dump(newDic, f)
+		#update json structure for item changes made during processing
+		newListJson = []
+		for i in self.past_items:
+			newListJson.append(
+				{"weeksWithout": i.get_weeks_past(),
+				 "frequency"   : i.get_frequency(),
+				 "quantity"    : i.get_quantity(),
+				 "name"        : i.get_name(),
+				 "unitType"    : i.get_unitType()
+			})
+		newDic = {"PastItems":newListJson}
+		abs_path = os.path.join(os.path.dirname(__file__), self.NEEDED_ITEMS_JSON)
+		with open(abs_path, 'w') as f:
+			json.dump(newDic, f)
 
 if __name__ == '__main__':
     L = ListProcessor()

@@ -93,9 +93,11 @@ def print_file_data(drive_file,tofile=False,filename = 'fileids.txt'):
     description = drive_file.get('description', 'NONE')
     downloadURL = drive_file.get('downloadUrl', 'NONE')
     if tofile:
-            file = open(filename,'w')
-            file.write('Name: {0}\n\tMemeType: {1}\n\tID: {2}\n\tDescription: {3}\n\tDownloadURL: {4}'.format(drive_file['name'], drive_file['mimeType'], drive_file['id'], description, downloadURL))
-            file.close()
+		#Path update
+		abs_path = os.path.join(os.path.dirname(__file__), filename)
+		file = open(abs_path,'w')
+		file.write('Name: {0}\n\tMemeType: {1}\n\tID: {2}\n\tDescription: {3}\n\tDownloadURL: {4}'.format(drive_file['name'], drive_file['mimeType'], drive_file['id'], description, downloadURL))
+		file.close()
     print('Name: {0}\n\tMemeType: {1}\n\tID: {2}\n\tDescription: {3}\n\tDownloadURL: {4}'.format(drive_file['name'], drive_file['mimeType'], drive_file['id'], description, downloadURL))
 
 def upload_file(fileObj,drive_service,new_text_file,debugging=False):
@@ -159,8 +161,10 @@ def download_file(fileObj,drive_service,exportFile='GroceryList.txt',debugging =
         print("Status: " + str(resp.status))
 
     if not resp.status == '400':
-        file = open(exportFile,'wb')
-        file.write(content)
+		#Path update
+		abs_path = os.path.join(os.path.dirname(__file__), exportFile)
+		file = open(abs_path,'wb')
+		file.write(content)
 
     return(resp, content)
 

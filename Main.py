@@ -19,46 +19,65 @@ from datetime import date
 import calendar
 
 try:
-    import argparse
-    parser = argparse.ArgumentParser()
-    parser.add_argument("-o","--override", help="Bypass daily action restricitons to commence list processing.",
-                            action = "store_true")
-    parser.add_argument("-n","--notify", help="Bypass daily action restrictions to send clear list notification.",
-                            action = "store_true")
-    args = parser.parse_args()
+	import argparse
+	parser = argparse.ArgumentParser()
+	parser.add_argument("-o","--override", help="Bypass daily action restricitons to commence list processing.", action = "store_true")
+	parser.add_argument("-n","--notify", help="Bypass daily action restrictions to send clear list notification.", action = "store_true")
+	parser.add_argument("-d","--debug", help="Sets the debug flag for the entire program. Debug lines will be printed to the terminal.", action = "store_true")
+	parser.add_argument("-s","--status", help="Will signal program to print out status flags for connections and processing", action = "store_true")
+	args = parser.parse_args()
 except ImportError:
     flags = None
 
 def import_settings():
-    with open("./settings.json", "r") as f:
-        data = json.load(f)
+	abs_path = os.path.join(os.path.dirname(__file__), "settings.json")
+	with open(abs_path, "r") as f:
+		data = json.load(f)
 
-        global SCOPES
-        global TARGET_FILE_NAME
-        global EXPORT_FILE_NAME
-        global RECOMMENDATIONS_FILE_NAME
-        global NEEDED_ITEMS_JSON
-        global Contacts
-        SCOPES = data['Scope']
-        TARGET_FILE_NAME = data['GDrive_Target']
-        EXPORT_FILE_NAME = data['Grocery_List_Export']
-        RECOMMENDATIONS_FILE_NAME = data['Item_Recommendations']
-        NEEDED_ITEMS_JSON = data['Common_Items_JSON']
-        Contacts = data['Contacts']
+		global SCOPES
+		global TARGET_FILE_NAME
+		global EXPORT_FILE_NAME
+		global RECOMMENDATIONS_FILE_NAME
+		global NEEDED_ITEMS_JSON
+		global Contacts
+		SCOPES = data['Scope']
+		TARGET_FILE_NAME = data['GDrive_Target']
+		EXPORT_FILE_NAME = data['Grocery_List_Export']
+		RECOMMENDATIONS_FILE_NAME = data['Item_Recommendations']
+		NEEDED_ITEMS_JSON = data['Common_Items_JSON']
+		Contacts = data['Contacts']
 
-        global debug
-        global perform_notify
-        global detail_modification_test
-        global testing_upload
-        debug = data["script_permissions"]["debug"]
-        perform_notify = data["script_permissions"]["perform_notify"]
-        detail_modification_test = data["script_permissions"]["mod_testing"]
-        testing_upload = data["script_permissions"]["upload_testing"]
+		global debug
+		global perform_notify
+		global detail_modification_test
+		global testing_upload
+		if args.debug:
+			#Handle command line argument
+			debug = True
+		else:
+			#If no cmd arg use settings 
+			debug = data["script_permissions"]["debug"]
+			
+		if args.notify:
+			#Handle command line argument
+			perform_notify = True
+		else:
+			#If no cmd arg use settings
+			perform_notify = data["script_permissions"]["perform_notify"]
+		
+		if args.status:
+			#Handle cmd args
+			detail_modification_test = True
+		else:
+			#Rely on settings if no cmd args
+			detail_modification_test = data["script_permissions"]["mod_testing"]
+			
+		testing_upload = data["script_permissions"]["upload_testing"]
 
-        global date
-        global day
-        date = date.today()
-        day = calendar.day_name[date.weekday()]
+		global date
+		global day
+		date = date.today()
+		day = calendar.day_name[date.weekday()]
 
 def download_Content(service, connection_status):
     if connection_status["gDrive"]:
@@ -105,6 +124,7 @@ def notify_logic(connection_status, listProcessResult, contact_eng):
                                         contacts = Contacts,
                                         connection_status = connection_status,
                                         subject = subject_text, debugging=debug)
+
 def upload_Content(service, connection_status, listProcessResult):
     if testing_upload and connection_status["gDrive"] and listProcessResult:
         content = upload_file(target_file,service,"Common_Items.json",debugging=True)
@@ -128,7 +148,7 @@ def main():
     connection_status["email"] = contact_eng.establish_email_connection()
     connection_status["phone"] = contact_eng.establish_phone_connection()
 
-    if day == "Friday" or args.override:
+    if ((day == "Friday" or args.override) and not args.notify):
         resp = download_Content(service = service, connection_status = connection_status)
 
         success = process_Content(service = service, connection_status = connection_status, downloadResp = resp)
