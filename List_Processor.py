@@ -79,10 +79,10 @@ class ListProcessor:
             return self.needed_items
 
     def generate_past_list(self,debugging = False):
-		#Path update
-		abs_path = os.path.join(os.path.dirname(__file__), self.NEEDED_ITEMS_JSON)
-		with open(abs_path, 'r') as f:
-			data = json.load(f)
+        #Path update
+        abs_path = os.path.join(os.path.dirname(__file__), self.NEEDED_ITEMS_JSON)
+        with open(abs_path, 'r') as f:
+        	data = json.load(f)
 
 		for i in data["PastItems"]:
 			r = item(name=i["name"],quantity=i["quantity"],
@@ -97,8 +97,8 @@ class ListProcessor:
 
     def generate_current_list(self,debugging = False):
 		bullet_list = False
-		abs_path = os.path.join(os.path.dirname(__file__), self.CURRENT_LIST)
-		file = open(abs_path,"r")
+        abs_path = os.path.join(os.path.dirname(__file__), self.CURRENT_LIST)
+        file = open(abs_path,"r")
 		for line in file:
 			if("Grocery List for Performance Software to be delivered" in line):
 				match = re.search('\d{2}/\d{2}/\d{2}',line)
@@ -129,9 +129,9 @@ class ListProcessor:
 		self.new_list_read = True
 
     def clear_file(self,filename):
-		abs_path = os.path.join(os.path.dirname(__file__), filename)
-		file = open(abs_path,"w")
-		file.truncate(0)
+        abs_path = os.path.join(os.path.dirname(__file__), filename)
+        file = open(abs_path,"w")
+        file.truncate(0)
 
     def print_items(self,listp):
         for item in listp:
@@ -146,8 +146,8 @@ class ListProcessor:
             return False
 
     def item_list_to_file(self,itemlist,filename="neededItems.txt"):
-		abs_path = os.path.join(os.path.dirname(__file__), filename)
-		file = open(abs_path, "w")
+        abs_path = os.path.join(os.path.dirname(__file__), filename)
+        file = open(abs_path, "w")
 		if self.list_out_of_date():
 			file.write("The current list is out of date as of "
 						+self.Current_Date+
@@ -178,9 +178,9 @@ class ListProcessor:
 				 "unitType"    : i.get_unitType()
 			})
 		newDic = {"PastItems":newListJson}
-		abs_path = os.path.join(os.path.dirname(__file__), self.NEEDED_ITEMS_JSON)
-		with open(abs_path, 'w') as f:
-			json.dump(newDic, f)
+        abs_path = os.path.join(os.path.dirname(__file__), self.NEEDED_ITEMS_JSON)
+        with open(abs_path, 'w') as f:
+            json.dump(newDic, f)
 
 if __name__ == '__main__':
     L = ListProcessor()
