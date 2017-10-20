@@ -92,12 +92,12 @@ def print_file_data(drive_file,tofile=False,filename = 'fileids.txt'):
     #Confirm that these data points have value for the given file
     description = drive_file.get('description', 'NONE')
     downloadURL = drive_file.get('downloadUrl', 'NONE')
+    #Path update
     if tofile:
-		#Path update
-		abs_path = os.path.join(os.path.dirname(__file__), filename)
-		file = open(abs_path,'w')
-		file.write('Name: {0}\n\tMemeType: {1}\n\tID: {2}\n\tDescription: {3}\n\tDownloadURL: {4}'.format(drive_file['name'], drive_file['mimeType'], drive_file['id'], description, downloadURL))
-		file.close()
+    	abs_path = os.path.join(os.path.dirname(__file__), filename)
+    	file = open(abs_path,'w')
+    	file.write('Name: {0}\n\tMemeType: {1}\n\tID: {2}\n\tDescription: {3}\n\tDownloadURL: {4}'.format(drive_file['name'], drive_file['mimeType'], drive_file['id'], description, downloadURL))
+    	file.close()
     print('Name: {0}\n\tMemeType: {1}\n\tID: {2}\n\tDescription: {3}\n\tDownloadURL: {4}'.format(drive_file['name'], drive_file['mimeType'], drive_file['id'], description, downloadURL))
 
 def upload_file(fileObj,drive_service,new_text_file,debugging=False):
