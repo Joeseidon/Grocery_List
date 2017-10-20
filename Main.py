@@ -55,23 +55,23 @@ def import_settings():
 			#Handle command line argument
 			debug = True
 		else:
-			#If no cmd arg use settings 
+			#If no cmd arg use settings
 			debug = data["script_permissions"]["debug"]
-			
+
 		if args.notify:
 			#Handle command line argument
 			perform_notify = True
 		else:
 			#If no cmd arg use settings
 			perform_notify = data["script_permissions"]["perform_notify"]
-		
+
 		if args.status:
 			#Handle cmd args
 			detail_modification_test = True
 		else:
 			#Rely on settings if no cmd args
 			detail_modification_test = data["script_permissions"]["mod_testing"]
-			
+
 		testing_upload = data["script_permissions"]["upload_testing"]
 
 		global date
