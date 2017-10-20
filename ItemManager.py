@@ -32,7 +32,9 @@ class ItemManager:
         print("\n")
     def JSONdata_to_itemlist(self):
         try:
-            with open(self.target_file,'r') as f:
+			#Path update
+			abs_path = os.path.join(os.path.dirname(__file__), self.target_file)
+            with open(abs_path,'r') as f:
                 data = json.load(f)
                 if data:
                     for i in data["PastItems"]:
@@ -56,7 +58,9 @@ class ItemManager:
                      "unitType"    : i.get_unitType()
                 })
             newDic = {"PastItems":newListJson}
-            with open(self.target_file, 'w') as f:
+			#Path update
+			abs_path = os.path.join(os.path.dirname(__file__), self.target_file)
+            with open(abs_path, 'w') as f:
                 json.dump(newDic, f)
 
     def listItems(self):
@@ -188,8 +192,10 @@ class ItemManager:
                 valid_y = ["y","Y"]
                 valid_n = ["n","N"]
                 if answer in valid_y:
+					#Path update
+				abs_path = os.path.join(os.path.dirname(__file__), filename)
                     #Create new file
-                    f = open(filename,"w")
+                    f = open(abs_path,"w")
                     f.close()
                     self.newFile = True
                     return True

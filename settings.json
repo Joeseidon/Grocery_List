@@ -1,8 +1,8 @@
 {
   "GDrive_Target": "psware grocery list",
-  "Grocery_List_Export": "./GroceryList.txt",
-  "Item_Recommendations": "./neededItems.txt",
-  "Common_Items_JSON": "./Common_items.json",
+  "Grocery_List_Export": "GroceryList.txt",
+  "Item_Recommendations": "neededItems.txt",
+  "Common_Items_JSON": "Common_items.json",
   "Contacts": {
     "Email_Contacts": [
       "cutinoj@mail.gvsu.edu",

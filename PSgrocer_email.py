@@ -49,35 +49,35 @@ class PS_Shopper_Email:
                 FROM= PyEmail,
                 email_list= ['cutinoj@mail.gvsu.edu'],
                 SUBJECT="Weekly Shopping List", SERVER = None, debugging = False):
+		abs_path = os.path.join(os.path.dirname(__file__), file_name)
+		f = open(abs_path)
+		text = f.readlines()
+		msg = "\n".join(text)
 
-        f = open(file_name)
-        text = f.readlines()
-        msg = "\n".join(text)
+		if SERVER == None:
+			SERVER = self.server
 
-        if SERVER == None:
-            SERVER = self.server
+		message = """From: %s\nTo: %s\nSubject: %s\n\n%s
+		""" % (FROM, ", ".join(email_list), SUBJECT, msg)
 
-        message = """From: %s\nTo: %s\nSubject: %s\n\n%s
-        """ % (FROM, ", ".join(email_list), SUBJECT, msg)
+		if self.get_setup_complete():
+			if debugging:
+				print("sendMail: setup completed")
+			try:
+				SERVER.sendmail(FROM, email_list, message)
+				if debugging:
+					print("Email Sent...(Maybe: There were atleast no exceptions thrown.)")
+					print("Message Data: " + message)
+			except:
+				traceback.print_exc()
 
-        if self.get_setup_complete():
-            if debugging:
-                print("sendMail: setup completed")
-            try:
-                SERVER.sendmail(FROM, email_list, message)
-                if debugging:
-                    print("Email Sent...(Maybe: There were atleast no exceptions thrown.)")
-                    print("Message Data: " + message)
-            except:
-                traceback.print_exc()
-
-        else:
-            if debugging:
-                print("sendMail: setup no complete")
-            try:
-                self.set_up()
-            except:
-                print("Email Setup Error")
+		else:
+			if debugging:
+				print("sendMail: setup no complete")
+			try:
+				self.set_up()
+			except:
+				print("Email Setup Error")
 
     def sendMail(self,TEXT,
                 FROM= PyEmail,
