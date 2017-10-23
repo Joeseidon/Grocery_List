@@ -1,0 +1,5 @@
+Name: psware grocery list
+	MemeType: application/vnd.google-apps.document
+	ID: 1cxgbJZKnysKOKBDg-ZbV1E3S4B-iAG7XY-1x7U8Yfsg
+	Description: NONE
+	DownloadURL: NONE

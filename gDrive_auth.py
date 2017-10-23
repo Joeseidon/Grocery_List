@@ -50,8 +50,11 @@ def init(argv, name, version, doc, filename, scope=None, parents=[], discovery_f
   # application, including client_id and client_secret, which are found
   # on the API Access tab on the Google APIs
   # Console <http://code.google.com/apis/console>.
-  client_secrets = os.path.join(os.path.dirname(filename),
-                                'client_secrets.json')
+  '''client_secrets = os.path.join(os.path.dirname(filename),
+                                'client_secrets.json')'''
+  #alternate file path attempt for NAS access issues:
+  client_secrets = os.path.join(os.path.dirname(__file__), 'client_secrets.json')
+  print("Client secret path: ",client_secrets)
 
   # Set up a Flow object to be used if we need to authenticate.
   flow = client.flow_from_clientsecrets(client_secrets,
@@ -62,7 +65,9 @@ def init(argv, name, version, doc, filename, scope=None, parents=[], discovery_f
   # If the credentials don't exist or are invalid run through the native client
   # flow. The Storage object will ensure that if successful the good
   # credentials will get written back to a file.
-  storage = file.Storage(name + '.dat')
+  '''storage = file.Storage(name + '.dat')'''
+  #Alternate file access to fix NAS issues
+  storage = file.Storage(os.path.join(os.path.dirname(__file__), 'drive.dat'))
   credentials = storage.get()
   if credentials is None or credentials.invalid:
     credentials = tools.run_flow(flow, storage, flags)

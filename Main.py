@@ -141,6 +141,8 @@ def main():
                                     doc = '__doc__', filename = '__file__',
                                     scope = SCOPES)
     except:
+        if debug:
+            print("Google Drive Connection Error.")
         connection_status["gDrive"] = False
 
     #Establish email and phone server connections
@@ -170,11 +172,12 @@ def main():
     if detail_modification_test:
         print("Connection Status: ")
         print(connection_status)
-        print("\n\n")
-        print("File Download (success): ")
-        print(resp)
-        print("\n\n")
-        print("List processing (success): "+str(success))
+        if((day == "Friday" or args.override) and not args.notify):
+            print("\n\n")
+            print("File Download (success): ")
+            print(resp)
+            print("\n\n")
+            print("List processing (success): "+str(success))
 
 if __name__ == '__main__':
     main()

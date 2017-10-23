@@ -1,0 +1,126 @@
+Client secret path:  /volume1/homes/jcutino/GroceryScript/Grocery_List/client_secrets.json
+***************Find Test********************
+Found
+Name: psware grocery list
+	MemeType: application/vnd.google-apps.document
+	ID: 1cxgbJZKnysKOKBDg-ZbV1E3S4B-iAG7XY-1x7U8Yfsg
+	Description: NONE
+	DownloadURL: NONE
+Name: psware grocery list
+	MemeType: application/vnd.google-apps.document
+	ID: 1cxgbJZKnysKOKBDg-ZbV1E3S4B-iAG7XY-1x7U8Yfsg
+	Description: NONE
+	DownloadURL: NONE
+Attempting to download file:
+	ID: 1cxgbJZKnysKOKBDg-ZbV1E3S4B-iAG7XY-1x7U8Yfsg
+	Name: psware grocery list
+	mimeTpye: application/vnd.google-apps.document
+	Download Type:text/plain
+Status: 200
+###############################Past#################################
+4 Honeycrisp Apples (or Fuji)
+1 bunch(es) Bananas
+1 bag seedless grapes
+5 Quest Protein Bar
+0.5 lbs Roast Beef
+0.5 lbs Ham
+0.25 lbs Provolone
+1 Bag Coffee
+1 Jar Pickels
+1 bag Oranges
+1 bag cookies
+1 box tissue
+1 qt half & half - Ultra-Pasteurized
+2 ctr 24 oz Meijer brand cottage cheese small curd
+###############################Current List#################################
+######Found(False = Needed Item)########
+False
+######Found(False = Needed Item)########
+False
+needed: Bananas
+######Found(False = Needed Item)########
+False
+######Found(False = Needed Item)########
+False
+needed: Quest Protein Bar
+######Found(False = Needed Item)########
+False
+needed: Roast Beef
+######Found(False = Needed Item)########
+False
+needed: Ham
+######Found(False = Needed Item)########
+False
+needed: Provolone
+######Found(False = Needed Item)########
+False
+######Found(False = Needed Item)########
+False
+needed: Pickels
+######Found(False = Needed Item)########
+False
+needed: Oranges
+######Found(False = Needed Item)########
+False
+needed: cookies
+######Found(False = Needed Item)########
+False
+needed: tissue
+######Found(False = Needed Item)########
+False
+needed: half & half - Ultra-Pasteurized
+######Found(False = Needed Item)########
+False
+###############################after########################
+1 bunch(es) Bananas
+5 Quest Protein Bar
+0.5 lbs Roast Beef
+0.5 lbs Ham
+0.25 lbs Provolone
+1 Jar Pickels
+1 bag Oranges
+1 bag cookies
+1 box tissue
+1 qt half & half - Ultra-Pasteurized
+SM738cbfb742fb44049ac84270ac59e2de
+sendMail: setup completed
+Email Sent...(Maybe: There were atleast no exceptions thrown.)
+Message Data: From: jcPyTest@gmail.com
+To: cutinoj@mail.gvsu.edu, joseph.cutino@psware.com
+Subject: Time to review next weeks shopping list.
+Check your email for recommendations.
+
+These recommendations are for the delivery for the week of: 10/23/17
+
+1 bunch(es) Bananas
+
+5 Quest Protein Bar
+
+0.5 lbs Roast Beef
+
+0.5 lbs Ham
+
+0.25 lbs Provolone
+
+1 Jar Pickels
+
+1 bag Oranges
+
+1 bag cookies
+
+1 box tissue
+
+1 qt half & half - Ultra-Pasteurized
+
+        
+Connection Status: 
+{'gDrive': True, 'email': True, 'phone': True}
+
+
+
+File Download (success): 
+{'x-xss-protection': '1; mode=block', 'transfer-encoding': 'chunked', 'content-location': 'https://www.googleapis.com/drive/v3/files/1cxgbJZKnysKOKBDg-ZbV1E3S4B-iAG7XY-1x7U8Yfsg/export?mimeType=text%2Fplain&key=AIzaSyBQHJRYRZKK1QovxtStf_QujyW8n_MJ8m4', 'content-disposition': 'attachment', 'content-type': 'text/plain', 'expires': 'Mon, 23 Oct 2017 14:59:20 GMT', 'x-content-type-options': 'nosniff', '-content-encoding': 'gzip', 'status': '200', 'server': 'GSE', 'date': 'Mon, 23 Oct 2017 14:59:20 GMT', 'alt-svc': 'quic=":443"; ma=2592000; v="39,38,37,35"', 'vary': 'Origin, X-Origin', 'content-length': '14406', 'cache-control': 'private, max-age=0, must-revalidate, no-transform', 'x-frame-options': 'SAMEORIGIN'}
+
+
+
+List processing (success): True
