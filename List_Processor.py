@@ -33,7 +33,7 @@ class ListProcessor:
             msg=traceback.print_exc()
             print(msg)
             return False
-        return True
+        return True, self.list_out_of_date(), time.strptime(self.List_Date, "%m/%d/%y")
     def getCurrentList(self):
         return current_list
     def determine_needed_items(self,debugging = False):
@@ -150,6 +150,13 @@ class ListProcessor:
         current_d = time.strptime(self.Current_Date, "%m/%d/%y")
         if(current_d > list_d):
             return True
+        elif(current_d == list_d):
+            #if same day then the the time will be considered.
+            #if passed 2pm set out of date.
+            if(datetime.datetime.now().time().hour >= 14):
+                return True
+            else: 
+                return False
         else:
             return False
 

@@ -15,69 +15,68 @@ import smtplib
 from gDrive_notification import *
 from List_Processor import *
 
+from datetime import datetime
 from datetime import date
 import calendar
 
 try:
-	import argparse
-	parser = argparse.ArgumentParser()
-	parser.add_argument("-o","--override", help="Bypass daily action restricitons to commence list processing.", action = "store_true")
-	parser.add_argument("-n","--notify", help="Bypass daily action restrictions to send clear list notification.", action = "store_true")
-	parser.add_argument("-d","--debug", help="Sets the debug flag for the entire program. Debug lines will be printed to the terminal.", action = "store_true")
-	parser.add_argument("-s","--status", help="Will signal program to print out status flags for connections and processing", action = "store_true")
-	args = parser.parse_args()
+    import argparse
+    parser = argparse.ArgumentParser()
+    parser.add_argument("-o","--override", help="Bypass daily action restricitons to commence list processing.", action = "store_true")
+    parser.add_argument("-n","--notify", help="Bypass daily action restrictions to send clear list notification.", action = "store_true")
+    parser.add_argument("-d","--debug", help="Sets the debug flag for the entire program. Debug lines will be printed to the terminal.", action = "store_true")
+    parser.add_argument("-s","--status", help="Will signal program to print out status flags for connections and processing", action = "store_true")
+    args = parser.parse_args()
 except ImportError:
     flags = None
 
 def import_settings():
-	abs_path = os.path.join(os.path.dirname(__file__), "settings.json")
-	with open(abs_path, "r") as f:
-		data = json.load(f)
+    abs_path = os.path.join(os.path.dirname(__file__), "settings.json")
+    with open(abs_path, "r") as f:
+        data = json.load(f)
+    global SCOPES
+    global TARGET_FILE_NAME
+    global EXPORT_FILE_NAME
+    global RECOMMENDATIONS_FILE_NAME
+    global NEEDED_ITEMS_JSON
+    global Contacts
+    SCOPES = data['Scope']
+    TARGET_FILE_NAME = data['GDrive_Target']
+    EXPORT_FILE_NAME = data['Grocery_List_Export']
+    RECOMMENDATIONS_FILE_NAME = data['Item_Recommendations']
+    NEEDED_ITEMS_JSON = data['Common_Items_JSON']
+    Contacts = data['Contacts']
+    
+    global debug
+    global perform_notify
+    global detail_modification_test
+    global testing_upload
+    if args.debug:
+        #Handle command line argument
+        debug = True
+    else:
+        #If no cmd arg use settings
+        debug = data["script_permissions"]["debug"]
+    if args.notify:
+        #Handle command line argument
+        perform_notify = True
+    else:
+        #If no cmd arg use settings
+        perform_notify = data["script_permissions"]["perform_notify"]
+    if args.status:
+        #Handle cmd args
+        detail_modification_test = True
+    else:
+        #Rely on settings if no cmd args
+        detail_modification_test = data["script_permissions"]["mod_testing"]
+    testing_upload = data["script_permissions"]["upload_testing"]
 
-		global SCOPES
-		global TARGET_FILE_NAME
-		global EXPORT_FILE_NAME
-		global RECOMMENDATIONS_FILE_NAME
-		global NEEDED_ITEMS_JSON
-		global Contacts
-		SCOPES = data['Scope']
-		TARGET_FILE_NAME = data['GDrive_Target']
-		EXPORT_FILE_NAME = data['Grocery_List_Export']
-		RECOMMENDATIONS_FILE_NAME = data['Item_Recommendations']
-		NEEDED_ITEMS_JSON = data['Common_Items_JSON']
-		Contacts = data['Contacts']
-
-		global debug
-		global perform_notify
-		global detail_modification_test
-		global testing_upload
-		if args.debug:
-			#Handle command line argument
-			debug = True
-		else:
-			#If no cmd arg use settings
-			debug = data["script_permissions"]["debug"]
-
-		if args.notify:
-			#Handle command line argument
-			perform_notify = True
-		else:
-			#If no cmd arg use settings
-			perform_notify = data["script_permissions"]["perform_notify"]
-
-		if args.status:
-			#Handle cmd args
-			detail_modification_test = True
-		else:
-			#Rely on settings if no cmd args
-			detail_modification_test = data["script_permissions"]["mod_testing"]
-
-		testing_upload = data["script_permissions"]["upload_testing"]
-
-		global date
-		global day
-		date = date.today()
-		day = calendar.day_name[date.weekday()]
+    global date
+    global day
+    date = date.today()
+    day = calendar.day_name[date.weekday()]
+    if debug:
+        print("Script Run: ",date," @",datetime.now().time())
 
 def download_Content(service, connection_status):
     if connection_status["gDrive"]:
@@ -107,23 +106,42 @@ def process_Content(service, connection_status, downloadResp):
 
     success = False
     try:
-        success = list_explorer.process_list(debug = debug)
+        success, out_of_date, list_date = list_explorer.process_list(debug = debug)
     except Exception as e:
         success = False
-        if perform_notify and connection_status["email"]:
-            contact_eng.send_error_msg(Contacts, e.msg, connections= connection_status)
+        out_of_date = None
+        #Notfiy will now be performed in the notify logic for processing errors 
+        #if perform_notify and connection_status["email"]:
+         #   contact_eng.send_error_msg(Contacts, e.msg, connections= connection_status)
 
-    return success
+    return success, out_of_date, list_date
 
-def notify_logic(connection_status, listProcessResult, contact_eng):
+def notify_logic(connection_status, listProcessResult, contact_eng, outOfDate, listDate):
     #used to limmit email and text during debugging and development
-    if perform_notify and listProcessResult:
-        subject_text = """Time to review next weeks shopping list.\nCheck your email for recommendations."""
-        #Notify individuals that the list should be looked at.
-        contact_eng.notify_Employee(text_file = RECOMMENDATIONS_FILE_NAME,
-                                        contacts = Contacts,
-                                        connection_status = connection_status,
-                                        subject = subject_text, debugging=debug)
+    if perform_notify and listProcessResult and (not outOfDate or args.override):
+        #Determine if the delivery date is near. If so, send a msg
+        date_l = listDate.split('/')
+        if((date_l[1]-date.day) == 4):
+            subject_text = """Time to review next weeks shopping list.\nCheck your email for recommendations."""
+            #Notify individuals that the list should be looked at.
+            contact_eng.notify_Employee(text_file = RECOMMENDATIONS_FILE_NAME,
+                                            contacts = Contacts,
+                                            connection_status = connection_status,
+                                            subject = subject_text, debugging=debug)
+    
+    elif perform_notify and listProcessResult and outOfDate:
+        #valid list but should have already been delivered 
+        str_msg = "This weeks groceries should have been delivered. If so, clear the google doc."               
+        contact_eng.text_Employee(contacts = Contacts, connection_status = connection_status, 
+                text_msg = str_msg, debugging=debug)
+
+    elif perform_notify and not listProcessResult:
+        #error in list processing 
+        errorMsg = "Grocery Script encountered a problem while attempting to analyze the current/past grocery list."
+        contact_eng.send_error_msg(Contacts, errorMsg, connections= connection_status)
+
+    else:
+        print("Notify setting is disabled.")
 
 def upload_Content(service, connection_status, listProcessResult):
     if testing_upload and connection_status["gDrive"] and listProcessResult:
@@ -150,15 +168,17 @@ def main():
     connection_status["email"] = contact_eng.establish_email_connection()
     connection_status["phone"] = contact_eng.establish_phone_connection()
 
-    if ((day == "Friday" or args.override) and not args.notify):
-        resp = download_Content(service = service, connection_status = connection_status)
+    '''if ((day == "Friday" or args.override) and not args.notify):'''
+    resp = download_Content(service = service, connection_status = connection_status)
 
-        success = process_Content(service = service, connection_status = connection_status, downloadResp = resp)
+    success, out_of_date, list_date = process_Content(service = service, connection_status = connection_status, downloadResp = resp)
 
-        notify_logic(connection_status = connection_status, listProcessResult = success, contact_eng = contact_eng)
+    notify_logic(connection_status = connection_status, listProcessResult = success, contact_eng = contact_eng, outOfDate = out_of_date, listDate = list_date)
+    
+    #Future functionality (disabled in function by testing_upload setting)
+    upload_Content(service = service, connection_status = connection_status, listProcessResult = success)
 
-        upload_Content(service = service, connection_status = connection_status, listProcessResult = success)
-
+    '''Attempting to process data each day and read date from file to determine action 
     elif day == "Monday" or args.notify:
         #notify employee to clear list after delivery
         str_msg = "This weeks groceries should have been delivered. If so, clear the google doc."
@@ -168,7 +188,7 @@ def main():
                                             text_msg = str_msg, debugging=debug)
     else:
         print("Action not needed today. Use command line args to override code sequence.")
-
+    '''
     if detail_modification_test:
         print("Connection Status: ")
         print(connection_status)
