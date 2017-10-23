@@ -1,1 +1,116 @@
-{"PastItems": [{"unitType": "na", "frequency": 5, "weeksWithout": 3, "name": "Honeycrisp Apples (or Fuji)", "quantity": 4}, {"unitType": "bunch(es)", "frequency": 1, "weeksWithout": 0, "name": "Bananas", "quantity": 1}, {"unitType": "bag", "frequency": 3, "weeksWithout": 2, "name": "seedless grapes", "quantity": 1}, {"unitType": "na", "frequency": 1, "weeksWithout": 0, "name": "Quest Protein Bar", "quantity": 5}, {"unitType": "lbs", "frequency": 3, "weeksWithout": 0, "name": "Roast Beef", "quantity": 0.5}, {"unitType": "lbs", "frequency": 1, "weeksWithout": 0, "name": "Ham", "quantity": 0.5}, {"unitType": "lbs", "frequency": 1, "weeksWithout": 0, "name": "Provolone", "quantity": 0.25}, {"unitType": "qt", "frequency": 1, "weeksWithout": 0, "name": "half & half - Ultra-Pasteurized", "quantity": 1}, {"unitType": "ctr", "frequency": 5, "weeksWithout": 3, "name": "24 oz Meijer brand cottage cheese small curd", "quantity": 2}, {"unitType": "Box(es)", "frequency": 1, "weeksWithout": 0, "name": "Red Baron Frozen Pizza", "quantity": 3}, {"unitType": "cup(s)", "frequency": 2, "weeksWithout": 0, "name": "Quaker Real Medleys - Apple Walnut Oatmeal", "quantity": 6}, {"unitType": "lbs", "frequency": 1, "weeksWithout": 0, "name": "Smoked Turkey", "quantity": 1}, {"unitType": "lb(s)", "frequency": 1, "weeksWithout": 0, "name": "Oven Roasted Chicken Breast", "quantity": 1}, {"unitType": "lb(s)", "frequency": 1, "weeksWithout": 0, "name": "Pastrami", "quantity": 1}]}
+{
+  "PastItems": [
+    {
+      "frequency": 5,
+      "name": "Honeycrisp Apples (or Fuji)",
+      "quantity": 4,
+      "unitType": "na",
+      "weeksWithout": 3
+    },
+    {
+      "frequency": 1,
+      "name": "Bananas",
+      "quantity": 1,
+      "unitType": "bunch(es)",
+      "weeksWithout": 0
+    },
+    {
+      "frequency": 3,
+      "name": "seedless grapes",
+      "quantity": 1,
+      "unitType": "bag",
+      "weeksWithout": 2
+    },
+    {
+      "frequency": 1,
+      "name": "Quest Protein Bar",
+      "quantity": 5,
+      "unitType": "na",
+      "weeksWithout": 0
+    },
+    {
+      "frequency": 1,
+      "name": "Roast Beef",
+      "quantity": 0.5,
+      "unitType": "lbs",
+      "weeksWithout": 0
+    },
+    {
+      "frequency": 1,
+      "name": "Ham",
+      "quantity": 0.5,
+      "unitType": "lbs",
+      "weeksWithout": 0
+    },
+    {
+      "frequency": 1,
+      "name": "Provolone",
+      "quantity": 0.25,
+      "unitType": "lbs",
+      "weeksWithout": 0
+    },
+    {
+      "frequency": 1,
+      "name": "half & half - Ultra-Pasteurized",
+      "quantity": 1,
+      "unitType": "qt",
+      "weeksWithout": 0
+    },
+    {
+      "frequency": 5,
+      "name": "24 oz Meijer brand cottage cheese small curd",
+      "quantity": 2,
+      "unitType": "ctr",
+      "weeksWithout": 3
+    },
+    {
+      "frequency": 1,
+      "name": "Red Baron Frozen Pizza",
+      "quantity": 3,
+      "unitType": "Box(es)",
+      "weeksWithout": 0
+    },
+    {
+      "frequency": 2,
+      "name": "Quaker Real Medleys - Apple Walnut Oatmeal",
+      "quantity": 6,
+      "unitType": "cup(s)",
+      "weeksWithout": 0
+    },
+    {
+      "frequency": 1,
+      "name": "Smoked Turkey",
+      "quantity": 1,
+      "unitType": "lbs",
+      "weeksWithout": 0
+    },
+    {
+      "frequency": 1,
+      "name": "Oven Roasted Chicken Breast",
+      "quantity": 0.75,
+      "unitType": "lb(s)",
+      "weeksWithout": 0
+    },
+    {
+      "frequency": 1,
+      "name": "Pastrami",
+      "quantity": 0.5,
+      "unitType": "lb(s)",
+      "weeksWithout": 0
+    },
+    {
+      "frequency": 1,
+      "name": "Colby-Jack",
+      "quantity": 0.25,
+      "unitType": "lb(s)",
+      "weeksWithout": 0
+    },
+    {
+      "frequency": 1,
+      "name": "Sharp Cheddar",
+      "quantity": 0.25,
+      "unitType": "lb(s)",
+      "weeksWithout": 0
+    }
+  ]
+}
