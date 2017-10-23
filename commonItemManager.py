@@ -4,13 +4,21 @@ import json
 from item import *
 from ItemManager import *
 
+if sys.version_info[:2] < (3,0):
+    #older version must use raw_input
+    try:
+        input = raw_input
+    except NameError:
+        pass
+    
+    
 def main():
     manager = ItemManager()
     if(len(sys.argv) == 1):
         #No file specified. Default to common_items.json used by the rest of the script
         manager.initialize_file("Common_items.json")
 
-    while True:
+    while(1):
         mainMenu = """\n\tList Items       ->  1
                     \n\tAdd Items        ->  2
                     \n\tRemove Items     ->  3
@@ -19,14 +27,17 @@ def main():
                     \n\tExit Program     ->  6\n"""
         print("Main Menu: (Target file = %s)\n%s"%(manager.getTargetFile(),mainMenu))
         invalid = True
-        while invalid:
+        while(invalid):
             try:
-                choice = int(raw_input("What are you here to do?: "))
+                choice = input("What are you here to do?: ")
+                choice = int(choice)
                 invalid = False
             except:
-                valid = True
+                #invalid remains false to stay in loop for input
+                invalid = True
         while not (choice > 0 and choice < 7):
-            choice = int(raw_input("Please choose a valid option: "))
+            choice = input("Please choose a valid option: ")
+            choice = int(choice)
         if(choice == 4):
             target_file = manager.getFileName()
             manager.initialize_file(target_file)

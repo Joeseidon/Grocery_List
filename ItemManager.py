@@ -3,6 +3,14 @@ import os
 import json
 from item import *
 
+
+if sys.version_info[:2] < (3,0):
+    #older version must use raw_input
+    try:
+        input = raw_input
+    except NameError:
+        pass
+
 class ItemManager:
     dataloaded = False
     target_file = ""
@@ -32,7 +40,7 @@ class ItemManager:
         print("\n")
     def JSONdata_to_itemlist(self):
         try:
-			#Path update
+            #Path update
             abs_path = os.path.join(os.path.dirname(__file__), self.target_file)
             with open(abs_path,'r') as f:
                 data = json.load(f)
@@ -58,7 +66,7 @@ class ItemManager:
                      "unitType"    : i.get_unitType()
                 })
             newDic = {"PastItems":newListJson}
-			#Path update
+	    #Path update
             abs_path = os.path.join(os.path.dirname(__file__), self.target_file)
             with open(abs_path, 'w') as f:
                 json.dump(newDic, f)
@@ -85,7 +93,7 @@ class ItemManager:
         if removing:
             msg="Remove Item: (y/n)"
 
-        answer = raw_input(msg)
+        answer = input(msg)
 
         valid_y = ["y","Y"]
         valid_n = ["n","N"]
@@ -104,31 +112,33 @@ class ItemManager:
         valid = False
 
         while not valid:
-            answer = raw_input("Name: ")
+            answer = input("Name: ")
             if answer and not answer == " ":
                 valid = True
         itemData["name"]=answer
         valid = False
 
         while not valid:
-            answer = raw_input("Unit Type: ")
+            answer = input("Unit Type: ")
             if answer and not answer == " ":
                 valid = True
         itemData["unitType"]=answer
         valid = False
 
         while not valid:
-            answer = raw_input("Quantity (integer): ")
+            answer = input("Quantity: ")
             if answer.isdigit():
                 valid = True
-        itemData["quantity"] = int(answer)
+                itemData["quantity"] = int(answer)
+            elif self.isfloat(answer):
+                valid = True
+                itemData["quantity"] = float(answer)
         valid = False
 
         while not valid:
-            answer = raw_input("Frequency (integer): ")
+            answer = input("Frequency (integer): ")
             if answer.isdigit():
                 valid = True
-
         itemData["frequency"] = int(answer)
         valid = False
 
@@ -139,7 +149,7 @@ class ItemManager:
         print("\nAdded Item: "+r.toString()+"\n")
 
     def removeItem(self):
-        answer = raw_input("Enter name of item to be removed: ")
+        answer = input("Enter name of item to be removed: ")
 
         if self.dataloaded or self.datacreated:
             for item in self.currentItemList:
@@ -172,7 +182,7 @@ class ItemManager:
     def fileprompt(self,msg=None):
         if msg:
             print(msg)
-        filename = raw_input("Please enter a JSON filename: ")
+        filename = input("Please enter a JSON filename: ")
         return filename
 
     def fileExists(self,filename):
@@ -188,11 +198,11 @@ class ItemManager:
                 return False
         else:
             while True:
-                answer = raw_input("Provided File doesn't exist. Create new file? (y/n)")
+                answer = input("Provided File doesn't exist. Create new file? (y/n)")
                 valid_y = ["y","Y"]
                 valid_n = ["n","N"]
                 if answer in valid_y:
-					#Path update
+		    #Path update
                     abs_path = os.path.join(os.path.dirname(__file__), filename)
                     #Create new file
                     f = open(abs_path,"w")
@@ -201,3 +211,10 @@ class ItemManager:
                     return True
                 if answer in valid_n:
                     return False
+    
+    def isfloat(self, value):
+        try:
+            float(value)
+            return True
+        except ValueError:
+            return False
