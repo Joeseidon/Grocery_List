@@ -26,3 +26,8 @@ must run commonItemManager.py
 # Fuctionality:
 Many of the scripts in this directory can be run individualy for testing but for
 full program functionality run Main.py with your desired command line arguments. 
+
+# Process Automation:
+The shell script EventTrigger.sh found in this directory can be used when setting 
+up reoccuring jobs if one does not wish to call Main.py with args directly. When 
+used debug statements will be redirected to the file debugLog.txt
