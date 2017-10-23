@@ -78,6 +78,7 @@ class PS_Shopper_Email:
         		self.set_up()
         	except:
         		print("Email Setup Error")
+        f.close()
 
     def sendMail(self,TEXT,
                 FROM= PyEmail,

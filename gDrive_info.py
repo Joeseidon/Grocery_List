@@ -162,10 +162,10 @@ def download_file(fileObj,drive_service,exportFile='GroceryList.txt',debugging =
 
     #Path update
     if not resp.status == '400':
-    	abs_path = os.path.join(os.path.dirname(__file__), exportFile)
-    	file = open(abs_path,'wb')
-    	file.write(content)
-
+        abs_path = os.path.join(os.path.dirname(__file__), exportFile)
+        file = open(abs_path,'wb')
+        file.write(content)
+        file.close()
     return(resp, content)
 
 def detect_changes(drive_service):

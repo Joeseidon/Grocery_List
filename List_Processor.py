@@ -4,6 +4,7 @@ import json
 import datetime
 import time
 import os
+import traceback
 
 class ListProcessor:
     old_list_read = False
@@ -26,7 +27,11 @@ class ListProcessor:
             self.item_list_to_file(self.determine_needed_items(debugging = debug))
             #Rewrite Common Items reference file
             self.rewrite_Common_Items_File()
-        except:
+        except Exception as e:
+            print("List processor error: ")
+            print(e)
+            msg=traceback.print_exc()
+            print(msg)
             return False
         return True
     def getCurrentList(self):
@@ -94,30 +99,37 @@ class ListProcessor:
     def generate_current_list(self,debugging = False):
         bullet_list = False
         abs_path = os.path.join(os.path.dirname(__file__), self.CURRENT_LIST)
-        file = open(abs_path,"r")
-        for line in file:
-            if("Grocery List for Performance Software to be delivered" in line):
-                match = re.search('\d{2}/\d{2}/\d{2}',line)
-                self.List_Date = match.group(0)
-                if ((not("Grocery List for Performance Software to be delivered" in line))
-                        and not (line in ['\n', '\r\n', ' '])
-                        and not("----------------------" in line)
-                        and not line == None):
-                    if("Everything below the line will not be ordered (for copy & paste - previous weeks)" in line):
-                        break
-                    quantity = ""
-                    index = 0
-                    for char in line:
-                        if char.isdigit():
-                            index += 1
-                            quantity += char
-                        else:
+        if debugging:
+            print("Path: ",abs_path)
+        #file = open(abs_path,"r")
+        with open(abs_path, 'r',encoding='utf-8') as f:
+            #print("Opened file")
+            for line in f:
+                #print(line)
+                if("Grocery List for Performance Software to be delivered" in line):
+                    match = re.search('\d{2}/\d{2}/\d{2}',line)
+                    self.List_Date = match.group(0)
+                    if ((not("Grocery List for Performance Software to be delivered" in line))
+                            and not (line in ['\n', '\r\n', ' '])
+                            and not("----------------------" in line)
+                            and not line == None):
+                        if("Everything below the line will not be ordered (for copy & paste - previous weeks)" in line):
                             break
-                        strItem = re.search('.+\S',line)
-                        if not (strItem == None):
-                            i = item(name=strItem.group(0)[index:],quantity=quantity)
-                            self.current_list.append(i)
-        file.close()
+                        quantity = ""
+                        index = 0
+                        for char in line:
+                            if char.isdigit():
+                                index += 1
+                                quantity += char
+                            else:
+                                break
+                            strItem = re.search('.+\S',line)
+                            if not (strItem == None):
+                                i = item(name=strItem.group(0)[index:],quantity=quantity)
+                                self.current_list.append(i)
+        #file.close()
+        if debugging:
+            print("File Processed")
         if debugging:
             print("###############################Current List#################################")
             self.print_items(self.current_list)
@@ -127,6 +139,7 @@ class ListProcessor:
         abs_path = os.path.join(os.path.dirname(__file__), filename)
         file = open(abs_path,"w")
         file.truncate(0)
+        file.close()
 
     def print_items(self,listp):
         for item in listp:
