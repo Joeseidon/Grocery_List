@@ -45,7 +45,8 @@ def import_settings():
     EXPORT_FILE_NAME = data['Grocery_List_Export']
     RECOMMENDATIONS_FILE_NAME = data['Item_Recommendations']
     NEEDED_ITEMS_JSON = data['Common_Items_JSON']
-    Contacts = data['Contacts']
+    #Now controled by debug cmd arg
+    '''Contacts = data['Contacts']'''
     
     global debug
     global perform_notify
@@ -54,9 +55,16 @@ def import_settings():
     if args.debug:
         #Handle command line argument
         debug = True
+        #Replace contacts list with a new list contating only the debuggers contact info
+        debugEmail=[]
+        debugPhone=[]
+        debugEmail.append(data['Contacts']['Email_Contacts'][0])
+        debugPhone.append(data['Contacts']['Phone_Contacts'][0])
+        Contacts = {"Email_Contacts": debugEmail, "Phone_Contacts": debugPhone} 
     else:
         #If no cmd arg use settings
         debug = data["script_permissions"]["debug"]
+        Contacts = data['Contacts']
     if args.notify:
         #Handle command line argument
         perform_notify = True
@@ -124,16 +132,28 @@ def notify_logic(connection_status, listProcessResult, contact_eng, outOfDate, l
         if((date_l[1]-date.day) == 4):
             subject_text = """Time to review next weeks shopping list.\nCheck your email for recommendations."""
             #Notify individuals that the list should be looked at.
-            contact_eng.notify_Employee(text_file = RECOMMENDATIONS_FILE_NAME,
+            '''contact_eng.notify_Employee(text_file = RECOMMENDATIONS_FILE_NAME,
                                             contacts = Contacts,
                                             connection_status = connection_status,
-                                            subject = subject_text, debugging=debug)
+                                            subject = subject_text, debugging=debug)'''
+            contact_eng.notify_Employee(contacts=Contacts,
+                                        connection_status=connection_status,
+                                        subject=subject_text,
+                                        text_file=RECOMMENDATIONS_FILE_NAME,
+                                        withTextFile=True,
+                                        debugging=debug)
     
     elif perform_notify and listProcessResult and outOfDate:
         #valid list but should have already been delivered 
         str_msg = "This weeks groceries should have been delivered. If so, clear the google doc."               
-        contact_eng.text_Employee(contacts = Contacts, connection_status = connection_status, 
-                text_msg = str_msg, debugging=debug)
+        '''contact_eng.text_Employee(contacts = Contacts, connection_status = connection_status, 
+                text_msg = str_msg, debugging=debug)'''
+        contact_eng.notify_Employee(contacts = Contacts,
+                                    connection_status = connection_status,
+                                    subject = "Grocery List Out of Date",
+                                    emailContent = str_msg,
+                                    withTextFile=False,
+                                    debugging=debug)
 
     elif perform_notify and not listProcessResult:
         #error in list processing 
