@@ -128,8 +128,12 @@ def notify_logic(connection_status, listProcessResult, contact_eng, outOfDate, l
     #used to limmit email and text during debugging and development
     if perform_notify and listProcessResult and (not outOfDate or args.override):
         #Determine if the delivery date is near. If so, send a msg
-        date_l = listDate.split('/')
-        if((date_l[1]-date.day) == 4):
+        '''date_l = listDate.split('/')'''
+        date_l = int(listDate.split('/')[1])
+        if debug:
+            print("List Day: ", date_l)
+            print("Current Day: ", date.day)
+        if((date_l-date.day) == 4):
             subject_text = """Time to review next weeks shopping list.\nCheck your email for recommendations."""
             #Notify individuals that the list should be looked at.
             '''contact_eng.notify_Employee(text_file = RECOMMENDATIONS_FILE_NAME,

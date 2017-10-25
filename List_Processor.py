@@ -33,7 +33,8 @@ class ListProcessor:
             msg=traceback.print_exc()
             print(msg)
             return False
-        return True, self.list_out_of_date(), time.strptime(self.List_Date, "%m/%d/%y")
+        '''return True, self.list_out_of_date(), time.strptime(self.List_Date, "%m/%d/%y")'''
+        return True,self.list_out_of_date(), self.List_Date
     def getCurrentList(self):
         return current_list
     def determine_needed_items(self,debugging = False):
