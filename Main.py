@@ -146,6 +146,14 @@ def notify_logic(connection_status, listProcessResult, contact_eng, outOfDate, l
                                         text_file=RECOMMENDATIONS_FILE_NAME,
                                         withTextFile=True,
                                         debugging=debug)
+        elif(args.override):
+            test_msg = "The override command was included when the PS Grocery script was run."
+            contact_eng.notify_Employee(contacts = Contacts,
+                                        connection_status = connection_status,
+                                        subject = "List processing test",
+                                        emailContent = test_msg,
+                                        withTextFile=False,
+                                        debugging=debug)
     
     elif perform_notify and listProcessResult and outOfDate:
         #valid list but should have already been delivered 
