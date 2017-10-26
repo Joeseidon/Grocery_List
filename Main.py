@@ -231,6 +231,9 @@ def main():
             print(resp)
             print("\n\n")
             print("List processing (success): "+str(success))
+    
+    '''clean up connection materials before shutdow'''
+    contact_eng.cleanUp(connection_status)
 
 if __name__ == '__main__':
     main()

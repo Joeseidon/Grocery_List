@@ -108,3 +108,6 @@ class PS_Shopper_Email:
                 self.set_up()
             except:
                 print("Email Setup Error")
+    
+    def cleanUp(self):
+        self.server.quit()

@@ -77,3 +77,8 @@ class EmployeeNotification:
 		'''
         if connections["email"]:
             self.email.sendMail(msg, TO=contacts, SUBJECT = "Script Error")
+
+    def cleanUp(self, connections):
+        if connections["email"]:
+            '''Disable SMTP email server'''
+            self.email.cleanUp()
