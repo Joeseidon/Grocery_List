@@ -37,7 +37,7 @@ class EmployeeNotification:
                                     msg=text_msg, debug = debugging)
 
 
-    def notify_Employee(self, contacts, connection_status, subject,text_file=None, 
+    def notify_Employee(self, contacts, connection_status, subject,text_file=None,
             emailContent=None, withTextFile = True, debugging = False):
         '''
 		Description: Makes use of the imported email module to
@@ -48,7 +48,7 @@ class EmployeeNotification:
 			contacts = list of contact numbers and email adresses
 			connection_status: tells the function if the email and
 				phone server connections have been created succesfully
-                        withTextFile: Used to differentiate between messages with textfiles and 
+                        withTextFile: Used to differentiate between messages with textfiles and
                                 pure msg text.
                         emailContent: Message used when text_file is not provided
 		'''
@@ -80,5 +80,5 @@ class EmployeeNotification:
 
     def cleanUp(self, connections):
         if connections["email"]:
-            '''Disable SMTP email server'''
+            #Disable SMTP email server
             self.email.cleanUp()

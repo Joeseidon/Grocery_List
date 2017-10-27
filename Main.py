@@ -45,9 +45,7 @@ def import_settings():
     EXPORT_FILE_NAME = data['Grocery_List_Export']
     RECOMMENDATIONS_FILE_NAME = data['Item_Recommendations']
     NEEDED_ITEMS_JSON = data['Common_Items_JSON']
-    #Now controled by debug cmd arg
-    '''Contacts = data['Contacts']'''
-    
+
     global debug
     global perform_notify
     global detail_modification_test
@@ -60,7 +58,7 @@ def import_settings():
         debugPhone=[]
         debugEmail.append(data['Contacts']['Email_Contacts'][0])
         debugPhone.append(data['Contacts']['Phone_Contacts'][0])
-        Contacts = {"Email_Contacts": debugEmail, "Phone_Contacts": debugPhone} 
+        Contacts = {"Email_Contacts": debugEmail, "Phone_Contacts": debugPhone}
     else:
         #If no cmd arg use settings
         debug = data["script_permissions"]["debug"]
@@ -118,29 +116,20 @@ def process_Content(service, connection_status, downloadResp):
     except Exception as e:
         success = False
         out_of_date = None
-        #Notfiy will now be performed in the notify logic for processing errors 
-        #if perform_notify and connection_status["email"]:
-         #   contact_eng.send_error_msg(Contacts, e.msg, connections= connection_status)
-
     return success, out_of_date, list_date
 
 def notify_logic(connection_status, listProcessResult, contact_eng, outOfDate, listDate):
     #used to limmit email and text during debugging and development
     if perform_notify and listProcessResult and (not outOfDate or args.override):
         #Determine if the delivery date is near. If so, send a msg
-        '''date_l = listDate.split('/')'''
         date_l = int(listDate.split('/')[1])
         if debug:
             print("List Day: ", date_l)
             print("Current Day: ", date.day)
-        '''Send list update recommendations on thrusday, friday, and saturday'''
+        #Send list update recommendations on thrusday, friday, and saturday
         if((date_l-date.day) in range(2,4)):
             subject_text = """Time to review next weeks shopping list.\nCheck your email for recommendations."""
             #Notify individuals that the list should be looked at.
-            '''contact_eng.notify_Employee(text_file = RECOMMENDATIONS_FILE_NAME,
-                                            contacts = Contacts,
-                                            connection_status = connection_status,
-                                            subject = subject_text, debugging=debug)'''
             contact_eng.notify_Employee(contacts=Contacts,
                                         connection_status=connection_status,
                                         subject=subject_text,
@@ -155,12 +144,10 @@ def notify_logic(connection_status, listProcessResult, contact_eng, outOfDate, l
                                         emailContent = test_msg,
                                         withTextFile=False,
                                         debugging=debug)
-    
+
     elif perform_notify and listProcessResult and outOfDate:
-        #valid list but should have already been delivered 
-        str_msg = "This weeks groceries should have been delivered. If so, clear the google doc."               
-        '''contact_eng.text_Employee(contacts = Contacts, connection_status = connection_status, 
-                text_msg = str_msg, debugging=debug)'''
+        #valid list but should have already been delivered
+        str_msg = "This weeks groceries should have been delivered. If so, clear the google doc."
         contact_eng.notify_Employee(contacts = Contacts,
                                     connection_status = connection_status,
                                     subject = "Grocery List Out of Date",
@@ -169,7 +156,7 @@ def notify_logic(connection_status, listProcessResult, contact_eng, outOfDate, l
                                     debugging=debug)
 
     elif perform_notify and not listProcessResult:
-        #error in list processing 
+        #error in list processing
         errorMsg = "Grocery Script encountered a problem while attempting to analyze the current/past grocery list."
         contact_eng.send_error_msg(Contacts, errorMsg, connections= connection_status)
 
@@ -201,27 +188,15 @@ def main():
     connection_status["email"] = contact_eng.establish_email_connection()
     connection_status["phone"] = contact_eng.establish_phone_connection()
 
-    '''if ((day == "Friday" or args.override) and not args.notify):'''
     resp = download_Content(service = service, connection_status = connection_status)
 
     success, out_of_date, list_date = process_Content(service = service, connection_status = connection_status, downloadResp = resp)
 
     notify_logic(connection_status = connection_status, listProcessResult = success, contact_eng = contact_eng, outOfDate = out_of_date, listDate = list_date)
-    
+
     #Future functionality (disabled in function by testing_upload setting)
     upload_Content(service = service, connection_status = connection_status, listProcessResult = success)
 
-    '''Attempting to process data each day and read date from file to determine action 
-    elif day == "Monday" or args.notify:
-        #notify employee to clear list after delivery
-        str_msg = "This weeks groceries should have been delivered. If so, clear the google doc."
-        if perform_notify or args.notify:
-            contact_eng.text_Employee(contacts = Contacts,
-                                            connection_status = connection_status,
-                                            text_msg = str_msg, debugging=debug)
-    else:
-        print("Action not needed today. Use command line args to override code sequence.")
-    '''
     if detail_modification_test:
         print("Connection Status: ")
         print(connection_status)
@@ -231,8 +206,8 @@ def main():
             print(resp)
             print("\n\n")
             print("List processing (success): "+str(success))
-    
-    '''clean up connection materials before shutdow'''
+
+    #clean up connection materials before shutdow
     contact_eng.cleanUp(connection_status)
 
 if __name__ == '__main__':
