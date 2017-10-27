@@ -1,2 +1,2 @@
 #!/opt/bin/bash
-python3 Main.py -n
+/usr/local/bin/python3 /volume1/homes/jcutino/GroceryScript/Grocery_List/Main.py -ods > /volume1/homes/jcutino/GroceryScript/Grocery_List/debugLog.txt
