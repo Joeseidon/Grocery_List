@@ -134,7 +134,7 @@ class ListProcessor:
         if debugging:
             print("###############################Current List#################################")
             self.print_items(self.current_list)
-            self.new_list_read = True
+        self.new_list_read = True
 
     def clear_file(self,filename):
         abs_path = os.path.join(os.path.dirname(__file__), filename)
