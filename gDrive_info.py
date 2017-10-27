@@ -138,6 +138,7 @@ def upload_file(fileObj,drive_service,new_text_file,debugging=False):
     file1.GetContentFile('pyDriveDownloadTest.txt',mimetype='text/plain')
 
     return "Uploaded"'''
+    return None
 def download_file(fileObj,drive_service,exportFile='GroceryList.txt',debugging = False):
     '''
     Description: This function uses an HTTP request to pull the

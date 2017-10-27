@@ -33,7 +33,6 @@ class ListProcessor:
             msg=traceback.print_exc()
             print(msg)
             return False
-        '''return True, self.list_out_of_date(), time.strptime(self.List_Date, "%m/%d/%y")'''
         return True,self.list_out_of_date(), self.List_Date
     def getCurrentList(self):
         return current_list
@@ -102,11 +101,8 @@ class ListProcessor:
         abs_path = os.path.join(os.path.dirname(__file__), self.CURRENT_LIST)
         if debugging:
             print("Path: ",abs_path)
-        #file = open(abs_path,"r")
         with open(abs_path, 'r',encoding='utf-8') as f:
-            #print("Opened file")
             for line in f:
-                #print(line)
                 if("Grocery List for Performance Software to be delivered" in line):
                     match = re.search('\d{2}/\d{2}/\d{2}',line)
                     self.List_Date = match.group(0)
@@ -128,7 +124,6 @@ class ListProcessor:
                             if not (strItem == None):
                                 i = item(name=strItem.group(0)[index:],quantity=quantity)
                                 self.current_list.append(i)
-        #file.close()
         if debugging:
             print("File Processed")
         if debugging:
@@ -156,7 +151,7 @@ class ListProcessor:
             #if passed 2pm set out of date.
             if(datetime.datetime.now().time().hour >= 14):
                 return True
-            else: 
+            else:
                 return False
         else:
             return False
