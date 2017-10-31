@@ -19,6 +19,8 @@ from datetime import datetime
 from datetime import date
 import calendar
 
+from datalogger import*
+
 try:
     import argparse
     parser = argparse.ArgumentParser()
@@ -48,7 +50,7 @@ def import_settings():
 
     global debug
     global perform_notify
-    global detail_modification_test
+    global statusLogging
     global testing_upload
     if args.debug:
         #Handle command line argument
@@ -71,10 +73,10 @@ def import_settings():
         perform_notify = data["script_permissions"]["perform_notify"]
     if args.status:
         #Handle cmd args
-        detail_modification_test = True
+        statusLogging = True
     else:
         #Rely on settings if no cmd args
-        detail_modification_test = data["script_permissions"]["mod_testing"]
+        statusLogging = data["script_permissions"]["mod_testing"]
     testing_upload = data["script_permissions"]["upload_testing"]
 
     global date
@@ -116,6 +118,7 @@ def process_Content(service, connection_status, downloadResp):
     except Exception as e:
         success = False
         out_of_date = None
+        list_date = None
     return success, out_of_date, list_date
 
 def notify_logic(connection_status, listProcessResult, contact_eng, outOfDate, listDate):
@@ -159,9 +162,12 @@ def notify_logic(connection_status, listProcessResult, contact_eng, outOfDate, l
         #error in list processing
         errorMsg = "Grocery Script encountered a problem while attempting to analyze the current/past grocery list."
         contact_eng.send_error_msg(Contacts, errorMsg, connections= connection_status)
+        return False #Notify not completed due to error
 
     else:
         print("Notify setting is disabled.")
+        return False #Notify not completed due to settings
+    return True #Notification completed correctly
 
 def upload_Content(service, connection_status, listProcessResult):
     if testing_upload and connection_status["gDrive"] and listProcessResult:
@@ -192,12 +198,12 @@ def main():
 
     success, out_of_date, list_date = process_Content(service = service, connection_status = connection_status, downloadResp = resp)
 
-    notify_logic(connection_status = connection_status, listProcessResult = success, contact_eng = contact_eng, outOfDate = out_of_date, listDate = list_date)
+    notify_status = notify_logic(connection_status = connection_status, listProcessResult = success, contact_eng = contact_eng, outOfDate = out_of_date, listDate = list_date)
 
     #Future functionality (disabled in function by testing_upload setting)
     upload_Content(service = service, connection_status = connection_status, listProcessResult = success)
 
-    if detail_modification_test:
+    if statusLogging:
         print("Connection Status: ")
         print(connection_status)
         if((day == "Friday" or args.override) and not args.notify):
@@ -206,6 +212,21 @@ def main():
             print(resp)
             print("\n\n")
             print("List processing (success): "+str(success))
+
+        if not success:
+            lstatus = "List Not Valid"
+        elif(out_of_date):
+            lstatus = "List Out of Date"
+        else:
+            lstatus = "List Valid"
+
+        #Log data
+        logger = log() #use default file
+        logger.logData(contact_list = Contacts,
+                       notification_status = notify_status,
+                       listProcessingSuccessful = success,
+                       connectionStatus = connection_status,
+                       ListStatus = lstatus)
 
     #clean up connection materials before shutdow
     contact_eng.cleanUp(connection_status)
